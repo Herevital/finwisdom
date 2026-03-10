@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מחולל תזרים עסקי — GameChangerZ</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+  <style>
+    :root {
+      --yellow: #FFC000;
+      --yellow-hover: #E6AC00;
+      --black: #000000;
+      --white: #ffffff;
+      --gray-light: #F5F7FA;
+      --gray-mid: #E0E0E0;
+      --text-dark: #000000;
+      --text-muted: #666666;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #ffffff;
+      color: #000000;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ─── */
+    header {
+      background: #000000;
+      color: #ffffff;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .logo-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border: 2px solid #FFC000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo-icon::after {
+      content: '';
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7px 0 7px 13px;
+      border-color: transparent transparent transparent #FFC000;
+      margin-right: -2px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 900;
+      color: #FFC000;
+      letter-spacing: 0.5px;
+    }
+
+    .logo-slogan {
+      font-size: 12px;
+      color: #aaaaaa;
+      font-weight: 400;
+      padding-right: 44px;
+    }
+
+    .header-sep {
+      width: 1px;
+      height: 36px;
+      background: #444444;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    /* ─── Main wrapper ─── */
+    main {
+      max-width: 680px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    /* ─── Progress bar ─── */
+    .progress-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 32px;
+      gap: 0;
+    }
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid var(--gray-mid);
+      background: var(--white);
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transition: all 0.3s;
+    }
+
+    .step-circle.active {
+      border-color: var(--yellow);
+      background: var(--yellow);
+      color: var(--black);
+    }
+
+    .step-circle.done {
+      border-color: var(--black);
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--gray-mid);
+      max-width: 80px;
+    }
+
+    .step-line.done { background: var(--black); }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 36px 40px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+      margin-bottom: 24px;
+      border: 1px solid var(--gray-mid);
+    }
+
+    /* ─── Buttons ─── */
+    .btn-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 13px 32px;
+      border-radius: 4px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      background: var(--yellow);
+      color: var(--black);
+    }
+
+    .btn-primary:hover { background: var(--yellow-hover); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 2px solid var(--gray-mid);
+    }
+
+    .btn-secondary:hover { border-color: var(--black); color: var(--black); }
+
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ─── Step container ─── */
+    #step-container { width: 100%; }
+
+    /* ─── Form ─── */
+    .step-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--black);
+      margin-bottom: 24px;
+    }
+
+    .step-form { width: 100%; }
+
+    .form-group { margin-bottom: 20px; }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+
+    .req { color: var(--yellow); }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border: 2px solid var(--gray-mid);
+      border-radius: 4px;
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      color: var(--text-dark);
+      background: var(--white);
+      transition: border-color 0.2s;
+      direction: rtl;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--yellow);
+    }
+
+    .form-group textarea { resize: vertical; }
+
+    .error-msg {
+      color: #E53E3E;
+      font-size: 13px;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+
+    /* ─── Preview table ─── */
+    .preview-table-wrap { overflow-x: auto; }
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .preview-table th, .preview-table td {
+      padding: 10px 12px;
+      text-align: right;
+      border-bottom: 1px solid var(--gray-mid);
+    }
+    .preview-table thead tr {
+      background: var(--black);
+      font-weight: 700;
+      color: var(--yellow);
+    }
+    .preview-table tbody tr:last-child td { border-bottom: none; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-wrap">
+      <div class="logo-brand">
+        <div class="logo-icon"></div>
+        <a href="https://www.gamechangerz.org" target="_blank" class="logo-text" style="text-decoration:none;">GameChangerZ.org</a>
+      </div>
+      <div class="logo-slogan">להוציא את היזם שבך</div>
+    </div>
+    <div class="header-sep"></div>
+    <h1>מחולל תזרים עסקי</h1>
+  </header>
+
+  <main>
+
+    <!-- Progress bar -->
+    <div class="progress-bar">
+      <div class="step-circle active" id="circle-1">1</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-circle" id="circle-2">2</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-circle" id="circle-3">3</div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-circle" id="circle-4">4</div>
+    </div>
+
+    <!-- Step card -->
+    <div class="card">
+      <div id="step-container">תוכן השלב יופיע כאן</div>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btn-back" disabled>חזור</button>
+      <button class="btn btn-primary" id="btn-next">הבא</button>
+    </div>
+
+  </main>
+
+  <script>
+    // ── State ──────────────────────────────────────────────
+    const formData = {};
+    let currentStep = 1;
+    const TOTAL_STEPS = 4;
+
+    // ── Progress bar update ────────────────────────────────
+    function updateProgress(step) {
+      for (let i = 1; i <= TOTAL_STEPS; i++) {
+        const circle = document.getElementById('circle-' + i);
+        circle.classList.remove('active', 'done');
+        if (i < step) circle.classList.add('done');
+        else if (i === step) circle.classList.add('active');
+      }
+      for (let i = 1; i < TOTAL_STEPS; i++) {
+        const line = document.getElementById('line-' + i);
+        line.classList.toggle('done', i < step);
+      }
+      document.getElementById('btn-back').disabled = (step === 1);
+    }
+
+    // ── Step 1: render ─────────────────────────────────────
+    function renderStep1() {
+      updateProgress(1);
+      const sel = (val, opt) => val === opt ? 'selected' : '';
+      document.getElementById('step-container').innerHTML = `
+        <div class="step-form">
+          <h2 class="step-title">שלב 1 — המוצר שלך</h2>
+          <div class="form-group">
+            <label>שם העסק <span class="req">*</span></label>
+            <input type="text" id="f-name" placeholder="לדוגמה: סטודיו לעיצוב" value="${formData.businessName || ''}">
+          </div>
+          <div class="form-group">
+            <label>תיאור המוצר/שירות <span class="req">*</span></label>
+            <textarea id="f-desc" rows="3" placeholder="תאר/י בקצרה את המוצר או השירות שלך">${formData.description || ''}</textarea>
+          </div>
+          <div class="form-group">
+            <label>קטגוריה <span class="req">*</span></label>
+            <select id="f-category">
+              <option value="">-- בחר/י קטגוריה --</option>
+              <option value="physical" ${sel(formData.category,'physical')}>מוצר פיזי</option>
+              <option value="service" ${sel(formData.category,'service')}>שירות</option>
+              <option value="saas" ${sel(formData.category,'saas')}>תוכנה-מנוי</option>
+              <option value="course" ${sel(formData.category,'course')}>קורס</option>
+              <option value="other" ${sel(formData.category,'other')}>אחר</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>מחיר מכירה ממוצע (₪) <span class="req">*</span></label>
+            <input type="number" id="f-price" placeholder="0" min="0" value="${formData.price || ''}">
+            <small style="color:var(--text-muted);font-size:12px;margin-top:6px;display:block">לדוגמה: אם מדובר במנוי חודשי — כתוב את המחיר החודשי. אם חד-פעמי — כתוב את מחיר העסקה.</small>
+          </div>
+          <div id="step1-error" class="error-msg" style="display:none">יש למלא את כל שדות החובה</div>
+        </div>`;
+    }
+
+    // ── Step 1: validate & save ────────────────────────────
+    function validateStep1() {
+      const name  = document.getElementById('f-name').value.trim();
+      const desc  = document.getElementById('f-desc').value.trim();
+      const cat   = document.getElementById('f-category').value;
+      const price = document.getElementById('f-price').value;
+      if (!name || !desc || !cat || !price) {
+        document.getElementById('step1-error').style.display = 'block';
+        return false;
+      }
+      formData.businessName = name;
+      formData.description  = desc;
+      formData.category     = cat;
+      formData.price        = parseFloat(price);
+      return true;
+    }
+
+    // ── Step 2: render ─────────────────────────────────────
+    function renderStep2() {
+      updateProgress(2);
+      const sel = (val, opt) => val === opt ? 'selected' : '';
+      document.getElementById('step-container').innerHTML = `
+        <div class="step-form">
+          <h2 class="step-title">שלב 2 — מודל הכנסות</h2>
+          <div class="form-group">
+            <label>מבנה תשלום <span class="req">*</span></label>
+            <select id="f-payment">
+              <option value="">-- בחר/י --</option>
+              <option value="onetime" ${sel(formData.paymentType,'onetime')}>חד-פעמי</option>
+              <option value="monthly" ${sel(formData.paymentType,'monthly')}>מנוי חודשי</option>
+              <option value="mixed"   ${sel(formData.paymentType,'mixed')}>שילוב</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>לקוחות חדשים בחודש ראשון <span class="req">*</span></label>
+            <input type="number" id="f-customers" placeholder="0" min="0" value="${formData.newCustomers || ''}">
+          </div>
+          <div class="form-group">
+            <label>קצב גידול חודשי (%)</label>
+            <input type="number" id="f-growth" placeholder="0" min="0" max="100" value="${formData.growthRate ?? ''}">
+          </div>
+          <div class="form-group">
+            <label>אחוז נטישה חודשי — Churn (%)</label>
+            <input type="number" id="f-churn" placeholder="0" min="0" max="100" value="${formData.churnRate ?? ''}">
+          </div>
+          <div id="step2-error" class="error-msg" style="display:none">יש למלא את שדות החובה</div>
+        </div>`;
+    }
+
+    // ── Step 2: validate & save ────────────────────────────
+    function validateStep2() {
+      const payment   = document.getElementById('f-payment').value;
+      const customers = document.getElementById('f-customers').value;
+      if (!payment || !customers) {
+        document.getElementById('step2-error').style.display = 'block';
+        return false;
+      }
+      formData.paymentType  = payment;
+      formData.newCustomers = parseInt(customers);
+      formData.growthRate   = parseFloat(document.getElementById('f-growth').value) || 0;
+      formData.churnRate    = parseFloat(document.getElementById('f-churn').value)  || 0;
+      return true;
+    }
+
+    // ── Step 3: render ─────────────────────────────────────
+    function renderStep3() {
+      updateProgress(3);
+      const v = (key) => formData[key] ?? '';
+      document.getElementById('step-container').innerHTML = `
+        <div class="step-form">
+          <h2 class="step-title">שלב 3 — הוצאות</h2>
+          <div class="form-group">
+            <label>עלות שירות ללקוח — COGS (₪) <span class="req">*</span></label>
+            <input type="number" id="f-cogs" placeholder="0" min="0" value="${v('cogs')}">
+          </div>
+          <div class="form-group">
+            <label>שכר חודשי (₪) <span class="req">*</span></label>
+            <input type="number" id="f-salary" placeholder="0" min="0" value="${v('salary')}">
+          </div>
+          <div class="form-group">
+            <label>שכירות ותשתיות (₪)</label>
+            <input type="number" id="f-rent" placeholder="0" min="0" value="${v('rent')}">
+          </div>
+          <div class="form-group">
+            <label>כלים ותוכנות (₪)</label>
+            <input type="number" id="f-tools" placeholder="0" min="0" value="${v('tools')}">
+          </div>
+          <div class="form-group">
+            <label>שיווק חודשי (₪)</label>
+            <input type="number" id="f-marketing" placeholder="0" min="0" value="${v('marketing')}">
+          </div>
+
+          <div id="step3-error" class="error-msg" style="display:none">יש למלא את שדות החובה</div>
+        </div>`;
+    }
+
+    // ── Step 3: validate & save ────────────────────────────
+    function validateStep3() {
+      const cogs   = document.getElementById('f-cogs').value;
+      const salary = document.getElementById('f-salary').value;
+      if (!cogs || !salary) {
+        document.getElementById('step3-error').style.display = 'block';
+        return false;
+      }
+      formData.cogs      = parseFloat(cogs);
+      formData.salary    = parseFloat(salary);
+      formData.rent      = parseFloat(document.getElementById('f-rent').value)      || 0;
+      formData.tools     = parseFloat(document.getElementById('f-tools').value)     || 0;
+      formData.marketing = parseFloat(document.getElementById('f-marketing').value) || 0;
+      return true;
+    }
+
+    // ── Step 4: compute 3-month preview ───────────────────
+    function computePreview() {
+      const isRecurring = formData.paymentType !== 'onetime';
+      const fixedExp = (formData.salary || 0) + (formData.rent || 0) +
+                       (formData.tools || 0) + (formData.marketing || 0);
+      let active = 0;
+      return [1, 2, 3].map(m => {
+        const newC = (formData.newCustomers || 0) *
+                     Math.pow(1 + (formData.growthRate || 0) / 100, m - 1);
+        active = isRecurring
+          ? active * (1 - (formData.churnRate || 0) / 100) + newC
+          : newC;
+        const revenue  = Math.round(active) * (formData.price || 0);
+        const varExp   = Math.round(active) * (formData.cogs  || 0);
+        const totalExp = varExp + fixedExp;
+        return { m, active: Math.round(active), revenue, totalExp, cashflow: revenue - totalExp };
+      });
+    }
+
+    // ── Step 4: render ─────────────────────────────────────
+    function renderStep4() {
+      updateProgress(4);
+      const sel = (val, opt) => val === opt ? 'selected' : '';
+      const sym = formData.currency || '₪';
+      const fmt = n => sym + '\u202F' + Math.round(n).toLocaleString('he-IL');
+      const rows = computePreview().map(r => `
+        <tr>
+          <td>חודש ${r.m}</td>
+          <td>${r.active.toLocaleString('he-IL')}</td>
+          <td>${fmt(r.revenue)}</td>
+          <td>${fmt(r.totalExp)}</td>
+          <td style="color:${r.cashflow >= 0 ? '#16A34A' : '#DC2626'};font-weight:700">${fmt(r.cashflow)}</td>
+        </tr>`).join('');
+      document.getElementById('step-container').innerHTML = `
+        <div class="step-form">
+          <h2 class="step-title">שלב 4 — הגדרות תחזית</h2>
+          <div class="form-group">
+            <label>יעד רווח חודשי לפני מס (₪) <span class="req">*</span></label>
+            <input type="number" id="f-profit-target" placeholder="כמה תרצה להרוויח בחודש?" min="0" value="${formData.profitTarget ?? ''}">
+            <small style="display:block;color:#666;font-size:12px;margin-top:4px;">זה הסכום שתרצה למשוך הביתה כל חודש, לפני מס. המשפך יחשב אחורה כמה לקוחות ולידים צריך כדי להגיע ליעד הזה.</small>
+          </div>
+          <div class="form-group">
+            <label>מספר חודשי תחזית</label>
+            <select id="f-months">
+              <option value="12" ${sel(formData.months,'12')}>12 חודשים</option>
+              <option value="24" ${sel(formData.months,'24')}>24 חודשים</option>
+              <option value="36" ${sel(formData.months,'36')}>36 חודשים</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>מטבע</label>
+            <select id="f-currency">
+              <option value="₪" ${sel(formData.currency,'₪')}>₪ שקל</option>
+              <option value="$" ${sel(formData.currency,'$')}>$ דולר</option>
+              <option value="€" ${sel(formData.currency,'€')}>€ יורו</option>
+            </select>
+          </div>
+          <h3 style="font-size:15px;font-weight:700;color:var(--blue-deep);margin:24px 0 12px">תצוגה מקדימה — 3 חודשים ראשונים</h3>
+          <div class="preview-table-wrap">
+            <table class="preview-table">
+              <thead><tr><th>חודש</th><th>לקוחות</th><th>הכנסות</th><th>הוצאות</th><th>תזרים</th></tr></thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+          <button class="btn btn-primary" style="width:100%;margin-top:24px" onclick="generateExcel()">הורד Excel</button>
+        </div>`;
+      formData.profitTarget = parseFloat(document.getElementById('f-profit-target').value) || 0;
+      formData.months   = document.getElementById('f-months').value;
+      formData.currency = document.getElementById('f-currency').value;
+    }
+
+    // ── Generate Excel (ExcelJS) ───────────────────────────
+    async function generateExcel() {
+      const mEl  = document.getElementById('f-months');
+      const cEl  = document.getElementById('f-currency');
+      const ptEl = document.getElementById('f-profit-target');
+      if (mEl)  formData.months        = mEl.value;
+      if (cEl)  formData.currency      = cEl.value;
+      if (ptEl) formData.profitTarget  = parseFloat(ptEl.value) || 0;
+
+      const N   = parseInt(formData.months) || 12;
+      const sym = formData.currency || '₪';
+      const HM  = ['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+      const cols = HM.slice(0, N);
+      const C = n=>{let s='',x=n+1;while(x>0){s=String.fromCharCode(64+(x%26||26))+s;x=Math.floor((x-1)/26);}return s;};
+      const lmc = C(N);
+
+      // חישוב נתונים חודשיים
+      const isRec = formData.paymentType !== 'onetime';
+      let act = 0;
+      const md = Array.from({length:N},(_,i)=>{
+        const newC=(formData.newCustomers||0)*Math.pow(1+(formData.growthRate||0)/100,i);
+        act=isRec?act*(1-(formData.churnRate||0)/100)+newC:newC;
+        const a=Math.round(act),nc=Math.round(newC),rev=a*(formData.price||0),cogs=a*(formData.cogs||0);
+        const sal=formData.salary||0,rent=formData.rent||0,tool=formData.tools||0,mkt=formData.marketing||0;
+        return{rev,cogs,sal,rent,tool,mkt,nc};
+      });
+      const vr =(l,fn)=>[l,...md.map(fn),''];
+      const emp=l=>[l,...Array(N).fill(''),''];
+      const sep=()=>Array(N+2).fill('');
+      const cat=l=>[l,...Array(N+1).fill('')];
+      let cum=0;
+      const cumRow=['תזרים מצטבר',...md.map(d=>{cum+=d.rev-d.cogs-d.sal-d.rent-d.tool-d.mkt;return Math.round(cum);}),''];
+
+      // ExcelJS workbook
+      const wb  = new ExcelJS.Workbook();
+      const ws1 = wb.addWorksheet('ניהול שוטף',{views:[{rightToLeft:true}]});
+      ws1.columns = [{width:30},...Array(N).fill({width:14}),{width:12},{width:14}];
+
+      // סגנונות
+      const AL   = {horizontal:'right',readingOrder:2};
+      const mFmt = `"${sym}"#,##0`;
+      const BLUE = {type:'pattern',pattern:'solid',fgColor:{argb:'FF000000'}};
+      const YSUM = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFFFF'}};
+      const YPRJ = {type:'pattern',pattern:'solid',fgColor:{argb:'FFF2F2F2'}};
+      const BACT = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFFFF'}};
+      const FHDR = {bold:true, size:10, name:'Arial', color:{argb:'FFFFFFFF'}};
+      const FSUM = {bold:true, size:10, name:'Arial'};
+      const FNRM = {size:10, name:'Arial'};
+
+      let rn = 0;
+      const style = (r,fill,font,money) => {
+        r.eachCell({includeEmpty:true},(cell,ci)=>{
+          cell.alignment=AL;
+          if(fill) cell.fill=fill;
+          if(font) cell.font=font;
+          if(money&&ci>=2&&ci<=N+1) cell.numFmt=mFmt;
+        });
+      };
+      const add = (data,fill,font,money) => { style(ws1.addRow(data),fill,font,money); return ++rn; };
+      const addAct = (data,fill,font,pr) => {
+        const r=ws1.addRow(data); ++rn;
+        style(r,fill,font,true);
+        const c=r.getCell(N+2);
+        c.value={formula:`IFERROR(SUM(B${rn}:${lmc}${rn})/SUM(B${pr}:${lmc}${pr}),0)`};
+        c.numFmt='0.0%'; c.alignment=AL;
+        if(fill) c.fill=fill;
+        if(font) c.font=font;
+        return rn;
+      };
+
+      // ── גיליון 1 — מבנה וכותרות בלבד (ללא נוסחאות) ──
+      const YMAR = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFF2CC'}};
+      const lbl  = l => [l,...Array(N+2).fill('')];
+
+      // שורה 1: כותרות עמודות
+      add(['קטגוריה',...cols,'% עמידה ביעד','סה"כ שנתי'], BLUE, FHDR);
+      // שורה 2: פעולות שיווקיות
+      add(lbl('פעולות שיווקיות מתוכננות'), YMAR, FNRM);
+      // שורה 3: ריק
+      add(lbl(''), null, FNRM);
+
+      // שורה 4: לקוחות
+      add(lbl('לקוחות'), BLUE, FHDR);
+      // שורות 5–6
+      const rowNewCustPlan = add(lbl('סגירות חדשות — צפוי'),  YPRJ, FNRM);
+      add(lbl('סגירות חדשות — בפועל'), BACT, FNRM);
+      // שורות 7–10: רק מנוי / שילוב
+      let rowChurnPlan = 0, rowActiveBase = 0;
+      if (isRec) {
+        rowChurnPlan  = add(lbl('נוטשים — צפוי'),           YPRJ, FNRM);
+        add(lbl('נוטשים — בפועל'),          BACT, FNRM);
+        add(lbl('אחוז נטישה בפועל (%)'),    BACT, FNRM);
+        rowActiveBase = add(lbl('מצבת לקוחות פעילים'),      YSUM, FSUM);
+      }
+      // ריק
+      add(lbl(''), null, FNRM);
+
+      // הכנסות
+      add(lbl('הכנסות'), BLUE, FHDR);
+      const rowRevPlan   = add(lbl('הכנסות — צפוי'),  YPRJ, FNRM);
+      add(lbl('הכנסות — בפועל'), BACT, FNRM);
+      // ריק
+      add(lbl(''), null, FNRM);
+
+      // הוצאות
+      add(lbl('הוצאות'), BLUE, FHDR);
+      const rowCOGSPlan  = add(lbl('עלות שירות COGS — צפוי'),  YPRJ, FNRM);
+      add(lbl('עלות שירות COGS — בפועל'), BACT, FNRM);
+      const rowSalPlan   = add(lbl('שכר — צפוי'),              YPRJ, FNRM);
+      add(lbl('שכר — בפועל'),             BACT, FNRM);
+      const rowRentPlan  = add(lbl('שכירות ותשתיות — צפוי'),  YPRJ, FNRM);
+      add(lbl('שכירות ותשתיות — בפועל'), BACT, FNRM);
+      const rowToolsPlan = add(lbl('כלים ותוכנות — צפוי'),    YPRJ, FNRM);
+      add(lbl('כלים ותוכנות — בפועל'),   BACT, FNRM);
+      const rowMktPlan   = add(lbl('שיווק — צפוי'),            YPRJ, FNRM);
+      add(lbl('שיווק — בפועל'),           BACT, FNRM);
+      // ריק
+      add(lbl(''), null, FNRM);
+
+      // סיכום
+      add(lbl('סיכום'), BLUE, FHDR);
+      const rowTotalRevPlan  = add(lbl('סה"כ הכנסות — צפוי'),   YSUM, FSUM);
+      const rowTotalRevAct   = add(lbl('סה"כ הכנסות — בפועל'),  YSUM, FSUM);
+      const rowTotalExpPlan  = add(lbl('סה"כ הוצאות — צפוי'),   YSUM, FSUM);
+      const rowTotalExpAct   = add(lbl('סה"כ הוצאות — בפועל'),  YSUM, FSUM);
+      const rowCashflowPlan  = add(lbl('תזרים חודשי — צפוי'),   YSUM, FSUM);
+      const rowCashflowAct   = add(lbl('תזרים חודשי — בפועל'),  YSUM, FSUM);
+      const rowBalancePlan   = add(lbl('יתרה מצטברת — צפוי'),   YSUM, FSUM);
+      const rowBalanceAct    = add(lbl('יתרה מצטברת — בפועל'),  YSUM, FSUM);
+      // ריק
+      add(lbl(''), null, FNRM);
+
+      // מדדים
+      add(lbl('מדדים'), BLUE, FHDR);
+      const rowCAC        = add(lbl('CAC — עלות רכישת לקוח'),      null, FNRM);
+      const rowGrossProfit = add(lbl('רווח גולמי'),              null, FNRM);
+      const rowGrossPct    = add(lbl('% רווח גולמי'),            null, FNRM);
+      const rowBreakeven   = add(lbl('Break-even — חודש איזון'), null, FNRM);
+      const rowHealthCheck = add(lbl('בדיקת בריאות: COGS מול מחיר'), null, FNRM);
+
+      // ── נוסחאות לקוחות (משימה 4) ──
+      // סגירות חדשות — צפוי
+      for (let m = 1; m <= N; m++) {
+        const cell = ws1.getCell(rowNewCustPlan, m + 1);
+        cell.value = m === 1
+          ? {formula: "'הנחות וקלטים'!B7"}
+          : {formula: `${C(m-1)}${rowNewCustPlan}*(1+'הנחות וקלטים'!B8/100)`};
+        cell.numFmt = '#,##0';
+        cell.alignment = AL;
+      }
+
+      if (isRec) {
+        // נוטשים — צפוי
+        for (let m = 1; m <= N; m++) {
+          const cell = ws1.getCell(rowChurnPlan, m + 1);
+          cell.value = m === 1
+            ? 0
+            : {formula: `${C(m-1)}${rowActiveBase}*'הנחות וקלטים'!B9/100`};
+          cell.numFmt = '#,##0';
+          cell.alignment = AL;
+        }
+        // אחוז נטישה בפועל — מחודש 2 והלאה
+        const rowChurnActPct = rowChurnPlan + 2;
+        for (let m = 2; m <= N; m++) {
+          const cell = ws1.getCell(rowChurnActPct, m + 1);
+          cell.value = {formula: `IFERROR(${C(m)}${rowChurnPlan+1}/${C(m-1)}${rowActiveBase},0)`};
+          cell.numFmt = '0.0%';
+          cell.alignment = AL;
+        }
+        // מצבת לקוחות פעילים
+        for (let m = 1; m <= N; m++) {
+          const cell = ws1.getCell(rowActiveBase, m + 1);
+          cell.value = m === 1
+            ? {formula: `${C(1)}${rowNewCustPlan}-${C(1)}${rowChurnPlan}`}
+            : {formula: `${C(m-1)}${rowActiveBase}+${C(m)}${rowNewCustPlan}-${C(m)}${rowChurnPlan}`};
+          cell.numFmt = '#,##0';
+          cell.alignment = AL;
+          cell.font = FSUM;
+          cell.fill = YSUM;
+        }
+      }
+
+      // ── נוסחאות הכנסות והוצאות (משימה 5) ──
+      const baseRow = isRec ? rowActiveBase : rowNewCustPlan;
+
+      // הכנסות — צפוי
+      for (let m = 1; m <= N; m++) {
+        const cell = ws1.getCell(rowRevPlan, m + 1);
+        cell.value = {formula: `${C(m)}${baseRow}*'הנחות וקלטים'!B5`};
+        cell.numFmt = mFmt;
+        cell.alignment = AL;
+      }
+
+      // עלות שירות COGS — צפוי
+      for (let m = 1; m <= N; m++) {
+        const cell = ws1.getCell(rowCOGSPlan, m + 1);
+        cell.value = {formula: `${C(m)}${baseRow}*'הנחות וקלטים'!B10`};
+        cell.numFmt = mFmt;
+        cell.alignment = AL;
+      }
+
+      // הוצאות קבועות — אותה נוסחה כל חודש
+      const fixedRows = [
+        [rowSalPlan,   "'הנחות וקלטים'!B11"],
+        [rowRentPlan,  "'הנחות וקלטים'!B12"],
+        [rowToolsPlan, "'הנחות וקלטים'!B13"],
+        [rowMktPlan,   "'הנחות וקלטים'!B14"],
+      ];
+      for (const [row, formula] of fixedRows) {
+        for (let m = 1; m <= N; m++) {
+          const cell = ws1.getCell(row, m + 1);
+          cell.value = {formula};
+          cell.numFmt = mFmt;
+          cell.alignment = AL;
+        }
+      }
+
+      // ── נוסחאות סיכום ומדדים (משימה 6) ──
+
+      // עזר: הוסף % עמידה ביעד + סה"כ שנתי לזוג שורות
+      const addTotals = (planRow, actRow, numFmt = mFmt) => {
+        if (actRow) {
+          const pct = ws1.getCell(actRow, N + 2);
+          pct.value = {formula: `IFERROR(SUM(B${actRow}:${lmc}${actRow})/SUM(B${planRow}:${lmc}${planRow}),0)`};
+          pct.numFmt = '0.0%'; pct.alignment = AL;
+        }
+        [planRow, actRow].filter(Boolean).forEach(r => {
+          const c = ws1.getCell(r, N + 3);
+          c.value = {formula: `SUM(B${r}:${lmc}${r})`};
+          c.numFmt = numFmt; c.alignment = AL;
+        });
+      };
+
+      // % ו-סה"כ לכל זוגות הצפוי/בפועל
+      addTotals(rowNewCustPlan, rowNewCustPlan + 1, '#,##0');
+      if (isRec) addTotals(rowChurnPlan, rowChurnPlan + 1, '#,##0');
+      addTotals(rowRevPlan,   rowRevPlan   + 1);
+      addTotals(rowCOGSPlan,  rowCOGSPlan  + 1);
+      addTotals(rowSalPlan,   rowSalPlan   + 1);
+      addTotals(rowRentPlan,  rowRentPlan  + 1);
+      addTotals(rowToolsPlan, rowToolsPlan + 1);
+      addTotals(rowMktPlan,   rowMktPlan   + 1);
+
+      // ── סה"כ הכנסות ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowTotalRevPlan, m + 1);
+        c.value = {formula: `${C(m)}${rowRevPlan}`}; c.numFmt = mFmt; c.alignment = AL;
+      }
+      addTotals(rowTotalRevPlan, rowTotalRevAct);
+
+      // ── סה"כ הוצאות ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowTotalExpPlan, m + 1);
+        c.value = {formula: `${C(m)}${rowCOGSPlan}+${C(m)}${rowSalPlan}+${C(m)}${rowRentPlan}+${C(m)}${rowToolsPlan}+${C(m)}${rowMktPlan}`};
+        c.numFmt = mFmt; c.alignment = AL;
+      }
+      addTotals(rowTotalExpPlan, rowTotalExpAct);
+
+      // ── תזרים חודשי ──
+      for (let m = 1; m <= N; m++) {
+        const cp = ws1.getCell(rowCashflowPlan, m + 1);
+        cp.value = {formula: `${C(m)}${rowTotalRevPlan}-${C(m)}${rowTotalExpPlan}`};
+        cp.numFmt = mFmt; cp.alignment = AL;
+        const ca = ws1.getCell(rowCashflowAct, m + 1);
+        ca.value = {formula: `IFERROR(${C(m)}${rowTotalRevAct}-${C(m)}${rowTotalExpAct},"")`};
+        ca.numFmt = mFmt; ca.alignment = AL;
+      }
+      addTotals(rowCashflowPlan, rowCashflowAct);
+
+      // ── יתרה מצטברת — צפוי ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowBalancePlan, m + 1);
+        c.value = m === 1
+          ? {formula: `${C(1)}${rowCashflowPlan}`}
+          : {formula: `${C(m-1)}${rowBalancePlan}+${C(m)}${rowCashflowPlan}`};
+        c.numFmt = mFmt; c.alignment = AL;
+      }
+      // יתרה מצטברת — עמודת סה"כ = ערך החודש האחרון בלבד
+      {
+        const c = ws1.getCell(rowBalancePlan, N + 3);
+        c.value = {formula: `${lmc}${rowBalancePlan}`};
+        c.numFmt = mFmt; c.alignment = AL;
+      }
+
+      // ── CAC ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowCAC, m + 1);
+        c.value = {formula: `IFERROR(${C(m)}${rowMktPlan}/${C(m)}${rowNewCustPlan},0)`};
+        c.numFmt = mFmt; c.alignment = AL;
+      }
+
+      // ── רווח גולמי ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowGrossProfit, m + 1);
+        c.value = {formula: `${C(m)}${rowRevPlan}-${C(m)}${rowCOGSPlan}`};
+        c.numFmt = mFmt; c.alignment = AL;
+      }
+
+      // ── % רווח גולמי ──
+      for (let m = 1; m <= N; m++) {
+        const c = ws1.getCell(rowGrossPct, m + 1);
+        c.value = {formula: `IFERROR(${C(m)}${rowGrossProfit}/${C(m)}${rowRevPlan},0)`};
+        c.numFmt = '0.0%'; c.alignment = AL;
+      }
+
+      // ── Break-even — חודש 1 בלבד ──
+      {
+        const c = ws1.getCell(rowBreakeven, 2);
+        let beFormula = '"לא בטווח"';
+        for (let m = N; m >= 1; m--) {
+          beFormula = `IF(${C(m)}${rowBalancePlan}>0,${m},${beFormula})`;
+        }
+        c.value = {formula: beFormula};
+        c.alignment = AL;
+      }
+
+      // ── בדיקת בריאות: COGS מול מחיר — חודש 1 בלבד ──
+      {
+        const c = ws1.getCell(rowHealthCheck, 2);
+        c.value = {formula: `IF('הנחות וקלטים'!B10>'הנחות וקלטים'!B5,"⚠ עלות השירות גבוהה מהמחיר!","✓ תקין")`};
+        c.alignment = AL;
+        const isWarning = (formData.cogs || 0) > (formData.price || 0);
+        c.fill = isWarning
+          ? {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFC7CE'}}
+          : {type:'pattern',pattern:'solid',fgColor:{argb:'FFC6EFCE'}};
+      }
+
+      // ── עיצוב (משימה 7) ──
+      const FCYAN = {type:'pattern',pattern:'solid',fgColor:{argb:'FFE2EFDA'}};
+      const FPURP = {type:'pattern',pattern:'solid',fgColor:{argb:'FFE8D5F5'}};
+      const FBLT  = {size:10, name:'Arial', color:{argb:'FF0000FF'}};
+      const BTOP  = {top:{style:'thin'}};
+
+      // שורות בפועל + קלט ידני — טקסט כחול
+      const blueRows = [
+        2, rowNewCustPlan+1, rowRevPlan+1,
+        rowCOGSPlan+1, rowSalPlan+1, rowRentPlan+1, rowToolsPlan+1, rowMktPlan+1,
+        rowTotalRevAct, rowTotalExpAct, rowCashflowAct, rowBalanceAct,
+      ];
+      if (isRec) blueRows.push(rowChurnPlan+1, rowChurnPlan+2);
+      blueRows.forEach(r => {
+        ws1.getRow(r).eachCell({includeEmpty:true}, cell => {
+          cell.font = {...(cell.font || {}), ...FBLT};
+        });
+      });
+
+      // מצבת לקוחות פעילים — ציאן
+      if (isRec) {
+        ws1.getRow(rowActiveBase).eachCell({includeEmpty:true}, c => { c.fill = FCYAN; });
+      }
+
+      // שורות סיכום — קו עליון
+      [rowTotalRevPlan, rowTotalRevAct, rowTotalExpPlan, rowTotalExpAct,
+       rowCashflowPlan, rowCashflowAct, rowBalancePlan, rowBalanceAct].forEach(r => {
+        ws1.getRow(r).eachCell({includeEmpty:true}, c => { c.border = BTOP; });
+      });
+
+      // מדדים — רקע סגול
+      const metRows = [rowCAC, rowGrossProfit, rowGrossPct, rowBreakeven];
+      metRows.forEach(r => {
+        ws1.getRow(r).eachCell({includeEmpty:true}, c => { c.fill = FPURP; });
+      });
+
+      // גיליון 2 — הנחות וקלטים
+      const catMap={physical:'מוצר פיזי',service:'שירות',saas:'תוכנה-מנוי',course:'קורס',other:'אחר'};
+      const payMap={onetime:'חד-פעמי',monthly:'מנוי חודשי',mixed:'שילוב'};
+      const ws2=wb.addWorksheet('הנחות וקלטים',{views:[{rightToLeft:true}]});
+      ws2.columns=[{width:30},{width:20}];
+      const isOnetime2 = formData.paymentType === 'onetime';
+      [['פרמטר','ערך'],['שם העסק',formData.businessName||''],['תיאור',formData.description||''],
+       ['קטגוריה',catMap[formData.category]||''],['מחיר מכירה ממוצע',formData.price||0],
+       ['מבנה תשלום',payMap[formData.paymentType]||''],['לקוחות חדשים — חודש ראשון',formData.newCustomers||0],
+       ['קצב גידול חודשי (%)',formData.growthRate||0],['אחוז נטישה Churn (%)',isOnetime2?0:formData.churnRate||0],
+       ['עלות שירות COGS',formData.cogs||0],['שכר חודשי',formData.salary||0],
+       ['שכירות ותשתיות',formData.rent||0],['כלים ותוכנות',formData.tools||0],
+       ['שיווק חודשי',formData.marketing||0],['יעד רווח חודשי לפני מס',formData.profitTarget||0],['מספר חודשי תחזית',N],['מטבע',sym],
+      ].forEach(row=>{const r=ws2.addRow(row);r.eachCell({includeEmpty:true},c=>{c.alignment=AL;c.font=FNRM;});});
+
+      // גיליון 3 — מילון מונחים
+      const ws3 = wb.addWorksheet('מילון מונחים', {views:[{rightToLeft:true}]});
+      ws3.columns = [{width:38}, {width:80}];
+      const GHDR = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
+      const GREW = {type:'pattern',pattern:'solid',fgColor:{argb:'FFF5F7FA'}};
+      const terms = [
+        ['CAC (עלות פר לקוח)', 'כמה עולה להביא חבר קונה. הסכום שהעסק מוציא (למשל על פרסומות) כדי לגרום לאיש אחד חדש לבוא ולקנות.'],
+        ['LTV (Lifetime Value)', 'כמה החבר שווה לנו בקופה. כמה כסף בסך הכל הלקוח ישלם לנו לאורך כל הזמן שהוא נשאר איתנו.'],
+        ['LTV/CAC Ratio', 'משחק התוצאות בין עלות לרווח. בודק אם משתלם להביא לקוחות. בעסקים טובים, הלקוח צריך להכניס לפחות פי 3 ממה שעלה להביא אותו.'],
+        ['KPI (Key Performance Indicator)', 'לוח הציונים שלנו. המספרים שמראים אם העסק בכיוון הנכון ואם אנחנו מצליחים להשיג את המטרות.'],
+        ['ROI (Return on Investment)', 'החזר השקעה. אם הוצאתי שקל אחד כדי לעשות משהו בעסק, כמה שקלים חזרו אליי בסוף.'],
+        ['COGS (Cost of Goods Sold)', 'כמה עלו המצרכים ללימונדה. כמה באמת עלה לנו לייצר ולספק ללקוח את מה שהוא קנה.'],
+        ['OpEx (Operating Expenses)', 'הוצאות הקיום של הדוכן. כל ההוצאות הקבועות שחייבים לשלם רק כדי שהעסק ימשיך לפעול — שכר דירה, חשמל, תוכנות.'],
+        ['EBITDA', 'הרווח הנקי מהעבודה שלנו. כמה הרוויח העסק מהעבודה עצמה, לפני מיסים, ריבית לבנק ופחת.'],
+        ['ARPU / ARPC (Average Revenue Per User/Client)', 'כמה בממוצע כל לקוח משלם. מחלקים את סך ההכנסות במספר הלקוחות ומגלים כמה מכניס לקוח אחד.'],
+        ['CPL (Cost Per Lead)', 'כמה עלה למצוא מתעניין. כמה הוצאנו על פרסום כדי לקבל פרטים של מישהו שאולי ירצה לקנות — עוד לפני שקנה.'],
+        ['SaaS (Software as a Service)', 'תוכנה שעושים אליה מנוי. עסקים שמוכרים תוכנה במנוי חודשי, כמו Netflix, במקום לקנות אותה פעם אחת.'],
+        ['MRR / ARR (Monthly / Annual Recurring Revenue)', 'הכסף הבטוח בקופה. כמה כסף נכנס בוודאות כל חודש (MRR) או כל שנה (ARR) ממנויים קיימים.'],
+        ['Churn Rate (אחוז נטישה)', 'כמה חברים עוזבים בכל חודש. אם יש 100 מנויים ו-5 ביטלו — ה-Churn הוא 5%. ככל שהמספר נמוך יותר, העסק בריא יותר.'],
+        ['B2B (Business to Business)', 'עסק מוכר לעסק אחר. המוצר שלנו לא נמכר לאנשים פרטיים אלא לחברות ועסקים אחרים.'],
+        ['B2C (Business to Consumer)', 'עסק מוכר לאנשים. כשהעסק מוכר ישירות לאנשים רגילים לשימוש עצמי.'],
+        ['CRM (Customer Relationship Management)', 'מחברת הזיכרונות החכמה. תוכנה שעוזרת לזכור הכל על הלקוחות — מתי דיברנו, מה הם קנו, מה הם צריכים.'],
+        ['SEO (Search Engine Optimization)', 'להיות ראשון בתור בגוגל. הדרך שמסדרים את האתר כך שכשמישהו מחפש בגוגל — אנחנו הראשונים שהוא רואה.'],
+        ['ROAS (Return on Ad Spend)', 'רווח מפרסום. אם שילמנו על פרסומת — המדד הזה אומר כמה כסף הרווחנו מהלקוחות שבאו בגללה.'],
+      ];
+      const hdrRow = ws3.addRow(['מונח', 'הסבר פשוט']);
+      hdrRow.eachCell(cell => {
+        cell.font = {bold:true, size:13, color:{argb:'FFFFFFFF'}};
+        cell.fill = GHDR;
+        cell.alignment = {horizontal:'right', readingOrder:2, wrapText:true};
+      });
+      terms.forEach(([term, def], i) => {
+        const r = ws3.addRow([term, def]);
+        r.height = 40;
+        r.eachCell(cell => {
+          cell.font = {size:11};
+          cell.fill = i%2===0 ? {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFFFF'}} : GREW;
+          cell.alignment = {horizontal:'right', readingOrder:2, wrapText:true};
+        });
+      });
+
+      // גיליון 4 — משפך מכירות
+      const ws4 = wb.addWorksheet('משפך מכירות', {views:[{rightToLeft:true}]});
+      ws4.columns = [{width:30}, {width:20}, {width:22}];
+
+      const F4HDR  = {type:'pattern',pattern:'solid',fgColor:{argb:'FF1E3A5F'}};
+      const F4YEL  = {type:'pattern',pattern:'solid',fgColor:{argb:'FFFFFDE7'}};
+      const F4BLU  = {type:'pattern',pattern:'solid',fgColor:{argb:'FFE3F2FD'}};
+      const F4GRN  = {type:'pattern',pattern:'solid',fgColor:{argb:'FFE8F5E9'}};
+      const F4ROW  = {type:'pattern',pattern:'solid',fgColor:{argb:'FFF5F7FA'}};
+      const fhdr   = {bold:true, size:13, color:{argb:'FFFFFFFF'}};
+      const fbld   = {bold:true, size:11};
+      const fnrm   = {size:11};
+      const aR     = {horizontal:'right', readingOrder:2};
+
+      const addF4Row = (values, fill, font, numFmts) => {
+        const r = ws4.addRow(values);
+        r.eachCell({includeEmpty:true}, (cell, ci) => {
+          cell.alignment = aR;
+          if (fill) cell.fill = fill;
+          cell.font = font || fnrm;
+          if (numFmts && numFmts[ci]) cell.numFmt = numFmts[ci];
+        });
+        return r;
+      };
+
+      // ── חלק עליון: כותרת + קלטים ──
+      const hR = ws4.addRow(['קלטים', '', '']);
+      hR.eachCell({includeEmpty:true}, c => { c.fill=F4HDR; c.font=fhdr; c.alignment=aR; });
+
+      // שורות קלט — נוסחאות המפנות לגיליון "הנחות וקלטים"
+      addF4Row(['יעד הכנסות חודשי', {formula:"IFERROR(('הנחות וקלטים'!B15+'הנחות וקלטים'!B11+'הנחות וקלטים'!B12+'הנחות וקלטים'!B13+'הנחות וקלטים'!B14)/(1-'הנחות וקלטים'!B10/'הנחות וקלטים'!B5),'הנחות וקלטים'!B15+'הנחות וקלטים'!B11+'הנחות וקלטים'!B12+'הנחות וקלטים'!B13+'הנחות וקלטים'!B14)"}, ''], F4YEL, fnrm, {2:`"${sym}"#,##0`});
+      addF4Row(['מחיר עסקה ממוצע',  {formula:"'הנחות וקלטים'!B5"},                   ''], F4YEL, fnrm, {2:`"${sym}"#,##0`});
+
+      // שורת מחושב (כחול בהיר): מספר עסקאות = B2/B3
+      const dealsRow = ws4.addRow(['מספר עסקאות נדרש', {formula:'IFERROR(B2/B3,0)'}, '']);
+      dealsRow.eachCell({includeEmpty:true}, (c,ci) => {
+        c.alignment=aR; c.fill=F4BLU; c.font=fnrm;
+        if (ci===2) c.numFmt='#,##0';
+      });
+
+      ws4.addRow([]); // רווח
+
+      // ── חלק אמצעי: כותרת + טבלת משפך ──
+      const funnelHdr = ws4.addRow(['שם השלב', '% המרה לשלב הבא', 'כמות נדרשת']);
+      funnelHdr.eachCell({includeEmpty:true}, c => { c.fill=F4HDR; c.font=fhdr; c.alignment=aR; });
+
+      // שלב 6 = סגירה — כמות = מספר עסקאות (B4)
+      // שלב N = כמות שלב N+1 ÷ (% ÷ 100) — כל שלב מחושב אחורה
+      const stages = ['חשיפה','ליד','אינטראקציה','יצירת קשר','שיחת מכירה','סגירה'];
+      const defPct = [5, 20, 30, 40, 60, 100]; // ברירות מחדל להמרה
+      // שורות המשפך — נוסף בסדר הפוך לוגית (שורה 6 = סגירה, שורה 1 = חשיפה)
+      // נבנה תחילה את מספרי השורות
+      const funnelStartRow = ws4.rowCount + 1;
+      stages.forEach((name, i) => {
+        const excelRow = funnelStartRow + i;
+        let qtyFormula;
+        if (i === stages.length - 1) {
+          // סגירה — שווה למספר עסקאות (תא B4)
+          qtyFormula = 'IFERROR(B4,0)';
+        } else {
+          // כל שלב = שלב הבא ÷ (% ÷ 100)
+          qtyFormula = `IFERROR(C${excelRow+1}/(B${excelRow}/100),0)`;
+        }
+        const r = ws4.addRow([name, defPct[i], {formula: qtyFormula}]);
+        r.eachCell({includeEmpty:true}, (c, ci) => {
+          c.alignment = aR;
+          c.fill = i % 2 === 0 ? F4YEL : F4ROW;
+          c.font = fnrm;
+          if (ci === 2) c.numFmt = '0"%"';
+          if (ci === 3) c.numFmt = '#,##0';
+        });
+      });
+
+      ws4.addRow([]); // רווח
+
+      // ── חלק תחתון: סיכום ──
+      const sumHdr = ws4.addRow(['סיכום', '', '']);
+      sumHdr.eachCell({includeEmpty:true}, c => { c.fill=F4HDR; c.font=fhdr; c.alignment=aR; });
+
+      // Pre-compute row numbers for summary
+      const sumHdrRowNum        = ws4.rowCount;
+      const leadsRowNum         = sumHdrRowNum + 1;
+      const cplRowNum           = sumHdrRowNum + 2;
+      const budgetNeededRowNum  = sumHdrRowNum + 3;
+      const budgetEnteredRowNum = sumHdrRowNum + 4;
+      const cacRowNum           = sumHdrRowNum + 6;
+      const leadFunnelRow       = funnelStartRow + 1; // שלב ליד (i=1)
+
+      // לידים נדרשים = כמות שלב ליד (שורה 2 בטבלה)
+      addF4Row(['סה"כ לידים נדרשים', {formula:`IFERROR(C${leadFunnelRow},0)`}, ''], F4GRN, fbld, {2:'#,##0'});
+      // CPL — קלט ידני (טקסט כחול)
+      addF4Row(['עלות ליד ממוצעת — CPL', 0, ''], F4BLU, {size:11, color:{argb:'FF0000FF'}}, {2:`"${sym}"#,##0`});
+      // תקציב שיווק נדרש = לידים × CPL
+      addF4Row(['תקציב שיווק נדרש', {formula:`IFERROR(B${leadsRowNum}*B${cplRowNum},0)`}, ''], F4BLU, fbld, {2:`"${sym}"#,##0`});
+      // תקציב שיווק שהוזן בשאלון
+      addF4Row(['תקציב שיווק שהוזן בשאלון', formData.marketing||0, ''], F4GRN, fnrm, {2:`"${sym}"#,##0`});
+      // הפרש = תקציב שיווק נדרש − תקציב שיווק שהוזן
+      addF4Row(['הפרש (חיסכון / גירעון)', {formula:`B${budgetEnteredRowNum}-B${budgetNeededRowNum}`}, ''], F4BLU, fbld, {2:`"${sym}"#,##0;[Red]-"${sym}"#,##0`});
+      // CAC = תקציב שיווק שהוזן ÷ מספר עסקאות נדרש (B4)
+      addF4Row(['CAC (עלות פר לקוח)', {formula:`IFERROR(B${budgetEnteredRowNum}/B4,0)`}, ''], F4BLU, fbld, {2:`"${sym}"#,##0`});
+      // הורדה
+      const buf=await wb.xlsx.writeBuffer();
+      const blob=new Blob([buf],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url; a.download=(formData.businessName||'עסק')+' — תזרים.xlsx'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ── Router ─────────────────────────────────────────────
+    function renderStep(step) {
+      document.getElementById('btn-next').style.display = step < TOTAL_STEPS ? '' : 'none';
+      if (step === 1) { renderStep1(); return; }
+      if (step === 2) { renderStep2(); return; }
+      if (step === 3) { renderStep3(); return; }
+      if (step === 4) { renderStep4(); return; }
+    }
+
+    // ── Button listeners ───────────────────────────────────
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (currentStep === 1 && !validateStep1()) return;
+      if (currentStep === 2 && !validateStep2()) return;
+      if (currentStep === 3 && !validateStep3()) return;
+      if (currentStep < TOTAL_STEPS) { currentStep++; renderStep(currentStep); }
+    });
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+      if (currentStep > 1) { currentStep--; renderStep(currentStep); }
+    });
+
+    // ── Init ───────────────────────────────────────────────
+    renderStep(currentStep);
+  </script>
+
+</body>
+</html>
