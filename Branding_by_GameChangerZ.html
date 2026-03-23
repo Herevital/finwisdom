@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>שיעור בידול ומיתוג | GameChangerZ</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0C0C14;
+  --bg2: #13131F;
+  --bg3: #1A1A2E;
+  --gold: #F5A623;
+  --gold2: #FFD166;
+  --coral: #E8593C;
+  --purple: #7C3AED;
+  --teal: #0EA5A0;
+  --text: #F0EEE8;
+  --text2: #A9A69E;
+  --text3: #6B6860;
+  --border: rgba(245,166,35,0.15);
+  --card: rgba(255,255,255,0.04);
+  --card-hover: rgba(255,255,255,0.07);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Heebo', sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+  position: fixed; top: 0; right: 0; left: 0; z-index: 100;
+  background: rgba(12,12,20,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 0.02em;
+}
+.logo span { color: var(--text2); font-size: 0.8rem; font-family: 'Heebo', sans-serif; font-weight: 300; display: block; }
+.progress-bar {
+  position: fixed; top: 64px; right: 0; left: 0; z-index: 99;
+  height: 3px; background: var(--bg3);
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--coral), var(--gold));
+  transition: width 0.5s ease;
+  width: 0%;
+}
+
+/* NAV DOTS */
+.nav-dots {
+  display: flex; gap: 8px; align-items: center;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  border: 1.5px solid var(--text3);
+  cursor: pointer; transition: all 0.3s;
+  background: transparent;
+}
+.dot.active { background: var(--gold); border-color: var(--gold); transform: scale(1.3); }
+.dot.done { background: var(--teal); border-color: var(--teal); }
+
+/* MAIN LAYOUT */
+.main { padding-top: 80px; }
+.chapter { display: none; min-height: calc(100vh - 80px); }
+.chapter.active { display: block; }
+
+/* HERO */
+.hero {
+  min-height: calc(100vh - 80px);
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 4rem 2rem;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 40%, rgba(124,58,237,0.12), transparent),
+              radial-gradient(ellipse 50% 40% at 80% 70%, rgba(232,89,60,0.08), transparent);
+}
+.chapter-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.3);
+  color: var(--gold); padding: 6px 16px; border-radius: 100px;
+  font-size: 0.8rem; font-weight: 500; margin-bottom: 1.5rem;
+  letter-spacing: 0.04em;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+.hero-title .accent { color: var(--gold); }
+.hero-title .coral { color: var(--coral); }
+.hero-sub {
+  font-size: 1.1rem; color: var(--text2); max-width: 600px;
+  margin: 0 auto 2.5rem;
+}
+.big-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(5rem, 15vw, 12rem);
+  font-weight: 900; line-height: 1;
+  color: rgba(245,166,35,0.08);
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  pointer-events: none; z-index: -1;
+  letter-spacing: -0.05em;
+}
+
+/* CONTENT SECTIONS */
+.section { padding: 4rem 2rem; max-width: 860px; margin: 0 auto; }
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; font-weight: 700;
+  margin-bottom: 2rem; color: var(--text);
+}
+.section-title .gold { color: var(--gold); }
+
+/* CARDS GRID */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem;
+  transition: background 0.2s, transform 0.2s;
+}
+.card:hover { background: var(--card-hover); transform: translateY(-2px); }
+.card-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; margin-bottom: 1rem;
+}
+.card-title { font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+.card-text { font-size: 0.9rem; color: var(--text2); line-height: 1.6; }
+
+/* HIGHLIGHT BOX */
+.highlight {
+  background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.25);
+  border-right: 4px solid var(--gold);
+  border-radius: var(--radius-sm); padding: 1.5rem;
+  margin: 2rem 0;
+}
+.highlight.coral { background: rgba(232,89,60,0.06); border-color: rgba(232,89,60,0.25); border-right-color: var(--coral); }
+.highlight.teal { background: rgba(14,165,160,0.06); border-color: rgba(14,165,160,0.25); border-right-color: var(--teal); }
+.highlight p { font-size: 0.95rem; color: var(--text2); }
+.highlight strong { color: var(--text); }
+
+/* COMPARISON TABLE */
+.compare {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; margin: 2rem 0;
+}
+.compare-header {
+  padding: 1rem 1.5rem; font-weight: 700; font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+.compare-header.bad { background: rgba(232,89,60,0.1); color: var(--coral); }
+.compare-header.good { background: rgba(14,165,160,0.1); color: var(--teal); }
+.compare-item {
+  padding: 0.85rem 1.5rem; background: var(--card);
+  font-size: 0.9rem; color: var(--text2);
+}
+.compare-item.bad { background: rgba(232,89,60,0.04); }
+.compare-item.good { background: rgba(14,165,160,0.04); color: var(--text); }
+
+/* ARCHETYPE GRID */
+.archetype-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem; margin: 2rem 0;
+}
+.archetype-card {
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 1.2rem; cursor: pointer; transition: all 0.2s; text-align: center;
+  background: var(--card);
+}
+.archetype-card:hover { border-color: var(--gold); background: rgba(245,166,35,0.06); }
+.archetype-card.selected { border-color: var(--gold); background: rgba(245,166,35,0.12); }
+.archetype-card .emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+.archetype-card .name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.25rem; }
+.archetype-card .desc { font-size: 0.78rem; color: var(--text2); }
+
+/* TRAIT SLIDERS */
+.trait-row {
+  display: flex; align-items: center; gap: 1rem; margin: 1.2rem 0;
+}
+.trait-label { min-width: 90px; font-size: 0.85rem; color: var(--text2); text-align: right; }
+.trait-label-right { min-width: 90px; font-size: 0.85rem; color: var(--text2); text-align: left; }
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  flex: 1; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.1); outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); cursor: pointer;
+  box-shadow: 0 0 0 4px rgba(245,166,35,0.2);
+}
+input[type=range]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--gold); cursor: pointer; border: none;
+}
+
+/* VOICE TAGS */
+.voice-grid {
+  display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.5rem 0;
+}
+.voice-tag {
+  padding: 8px 16px; border-radius: 100px;
+  border: 1.5px solid var(--border); font-size: 0.85rem;
+  cursor: pointer; transition: all 0.2s; background: var(--card);
+  color: var(--text2);
+}
+.voice-tag:hover { border-color: var(--gold); color: var(--text); }
+.voice-tag.selected { border-color: var(--gold); background: rgba(245,166,35,0.12); color: var(--gold); font-weight: 500; }
+
+/* INPUTS */
+.form-group { margin: 1.5rem 0; }
+.form-label { display: block; font-size: 0.9rem; font-weight: 500; margin-bottom: 0.6rem; color: var(--text2); }
+.form-label span { color: var(--gold); }
+textarea, input[type=text], select {
+  width: 100%; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.85rem 1rem;
+  color: var(--text); font-family: 'Heebo', sans-serif; font-size: 0.95rem;
+  outline: none; transition: border-color 0.2s; resize: vertical; direction: rtl;
+}
+textarea:focus, input[type=text]:focus, select:focus { border-color: var(--gold); }
+textarea { min-height: 90px; }
+select option { background: var(--bg3); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px; border-radius: 100px; font-size: 0.95rem;
+  font-weight: 600; cursor: pointer; border: none;
+  transition: all 0.2s; font-family: 'Heebo', sans-serif; letter-spacing: 0.01em;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--coral), var(--gold));
+  color: #0C0C14;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(232,89,60,0.3); }
+.btn-secondary {
+  background: transparent; border: 1.5px solid var(--border);
+  color: var(--text2);
+}
+.btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.btn-row { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; align-items: center; }
+
+/* AI RESULT */
+.ai-result {
+  background: var(--bg2); border: 1px solid rgba(124,58,237,0.3);
+  border-radius: var(--radius); padding: 2rem; margin-top: 2rem;
+  display: none;
+}
+.ai-result.visible { display: block; }
+.result-section { margin: 1.5rem 0; }
+.result-section-title {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--gold); font-weight: 700; margin-bottom: 0.75rem;
+  padding-bottom: 0.5rem; border-bottom: 1px solid var(--border);
+}
+.result-text { font-size: 0.95rem; color: var(--text2); line-height: 1.8; }
+.result-text strong { color: var(--text); }
+.result-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.result-tag {
+  padding: 5px 14px; border-radius: 100px; font-size: 0.82rem; font-weight: 500;
+  background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.2); color: var(--gold);
+}
+.result-tag.purple { background: rgba(124,58,237,0.1); border-color: rgba(124,58,237,0.2); color: #A78BFA; }
+.result-tag.coral { background: rgba(232,89,60,0.1); border-color: rgba(232,89,60,0.2); color: #FB8C70; }
+.result-tag.teal { background: rgba(14,165,160,0.1); border-color: rgba(14,165,160,0.2); color: #2DD4CC; }
+.tagline-display {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--text);
+  background: rgba(245,166,35,0.06); border: 1px solid rgba(245,166,35,0.2);
+  border-radius: var(--radius-sm); padding: 1.2rem 1.5rem; margin: 1rem 0;
+  text-align: center;
+}
+
+/* LOADING */
+.loading-state {
+  text-align: center; padding: 3rem; display: none;
+}
+.loading-state.visible { display: block; }
+.spinner {
+  width: 40px; height: 40px; border: 3px solid rgba(245,166,35,0.2);
+  border-top-color: var(--gold); border-radius: 50%;
+  animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-state p { color: var(--text2); font-size: 0.9rem; }
+.loading-dots::after {
+  content: '...'; animation: dots 1.2s steps(3, end) infinite;
+}
+@keyframes dots {
+  0% { content: '.'; } 33% { content: '..'; } 66% { content: '...'; }
+}
+
+/* CHAPTER NAV */
+.chapter-footer {
+  border-top: 1px solid var(--border);
+  padding: 2rem; display: flex; justify-content: space-between; align-items: center;
+  max-width: 860px; margin: 0 auto;
+}
+
+/* QUOTE STYLE */
+.big-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem); font-weight: 700;
+  color: var(--text); text-align: center; padding: 2rem;
+  border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--card); margin: 2rem 0; line-height: 1.5;
+}
+.big-quote span { color: var(--gold); }
+.big-quote small { display: block; font-family: 'Heebo', sans-serif;
+  font-size: 0.8rem; font-weight: 400; color: var(--text3); margin-top: 0.75rem; }
+
+/* STEP VISUAL */
+.steps-flow {
+  display: flex; flex-direction: column; gap: 0.5rem; margin: 2rem 0;
+}
+.step-item {
+  display: flex; align-items: flex-start; gap: 1.25rem;
+  padding: 1.25rem; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.step-num {
+  min-width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(245,166,35,0.1); border: 1.5px solid rgba(245,166,35,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.85rem; color: var(--gold);
+}
+.step-content h4 { font-weight: 700; margin-bottom: 0.3rem; }
+.step-content p { font-size: 0.88rem; color: var(--text2); }
+
+/* EXAMPLE BRANDS */
+.brand-example {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem 1.25rem; background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); margin: 0.75rem 0;
+}
+.brand-color { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+.brand-name { font-weight: 700; font-size: 0.9rem; }
+.brand-desc { font-size: 0.82rem; color: var(--text2); }
+
+/* PERSONALITY RESULT PREVIEW */
+.personality-preview {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 1.5rem; margin-top: 2rem; display: none;
+}
+.personality-preview.visible { display: block; }
+.personality-preview h4 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 1rem; }
+.trait-bar { display: flex; align-items: center; gap: 0.75rem; margin: 0.6rem 0; font-size: 0.85rem; }
+.trait-name { min-width: 80px; color: var(--text2); }
+.trait-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; }
+.trait-fill { height: 100%; background: var(--gold); border-radius: 3px; transition: width 0.3s; }
+.trait-val { min-width: 30px; color: var(--gold); font-weight: 700; text-align: left; font-size: 0.8rem; }
+
+/* CHAPTER HEADER */
+.ch-header {
+  padding: 4rem 2rem 2rem; max-width: 860px; margin: 0 auto;
+  border-bottom: 1px solid var(--border);
+}
+.ch-num {
+  font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--gold); font-weight: 700; margin-bottom: 0.75rem;
+}
+.ch-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; line-height: 1.15;
+  margin-bottom: 0.75rem;
+}
+.ch-desc { font-size: 1rem; color: var(--text2); max-width: 600px; }
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .compare { grid-template-columns: 1fr; }
+  .trait-row { flex-wrap: wrap; }
+  .btn-row { flex-direction: column; }
+  .chapter-footer { flex-direction: column; gap: 1rem; }
+}
+
+/* COLOR PALETTE DISPLAY */
+.palette-row { display: flex; gap: 0.75rem; margin: 1.5rem 0; flex-wrap: wrap; }
+.color-swatch {
+  flex: 1; min-width: 80px; height: 64px; border-radius: var(--radius-sm);
+  display: flex; align-items: flex-end; padding: 0.5rem; font-size: 0.7rem; font-weight: 600;
+}
+
+/* STAT BOXES */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin: 2rem 0; }
+.stat-box { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; text-align: center; }
+.stat-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; color: var(--gold); }
+.stat-label { font-size: 0.82rem; color: var(--text2); margin-top: 0.25rem; }
+
+/* INTRO CHAPTER ZERO SPECIFIC */
+.intro-features { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 3rem 0; }
+.intro-feat { display: flex; align-items: flex-start; gap: 0.75rem; }
+.feat-icon { font-size: 1.2rem; margin-top: 2px; flex-shrink: 0; }
+.feat-text h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+.feat-text p { font-size: 0.82rem; color: var(--text2); }
+
+.error-msg { color: var(--coral); font-size: 0.85rem; margin-top: 0.5rem; display: none; }
+.error-msg.visible { display: block; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    GameChangerZ <span>מנוע מיתוג לייב 🔥</span>
+  </div>
+  <nav class="nav-dots" id="navDots"></nav>
+</header>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<main class="main" id="mainContent">
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 0 – INTRO / LANDING
+═══════════════════════════════════════════════════════ -->
+<div class="chapter active" id="ch0">
+  <div class="hero">
+    <div class="big-number">B</div>
+    <div class="chapter-badge">שיעור מיתוג מקצועי · 5 פרקים</div>
+    <h1 class="hero-title">
+      ה<span class="accent">בידול</span> שלך<br>
+      <span class="coral">= הכסף</span> שלך
+    </h1>
+    <p class="hero-sub">בואו ללמוד איך חברות מיתוג מובילות בונות זהות מותג — ואז לעשות את זה בעצמכם עם בינה מלאכותית, תוך דקות</p>
+    <div class="intro-features">
+      <div class="intro-feat">
+        <span class="feat-icon">🎯</span>
+        <div class="feat-text">
+          <h4>מה זה בידול ולמה זה מכריע</h4>
+          <p>הסיבה האמיתית שלקוחות בוחרים דווקא אתכם</p>
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="feat-icon">🧠</span>
+        <div class="feat-text">
+          <h4>אישיות מותג מלאה</h4>
+          <p>12 ארכיטיפים + כלים לבניית אופי ייחודי</p>
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="feat-icon">✍️</span>
+        <div class="feat-text">
+          <h4>שפה מיתוגית מבודלת</h4>
+          <p>טון, שפה, מסרים שנדבקים לזיכרון</p>
+        </div>
+      </div>
+      <div class="intro-feat">
+        <span class="feat-icon">🤖</span>
+        <div class="feat-text">
+          <h4>תהליך מיתוג עם AI</h4>
+          <p>מקבלים ב-2 דקות מה שסוכנות גובה עליו ₪20,000</p>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="goChapter(1)" style="position:relative;z-index:10;">
+      בוא נתחיל ← פרק 1
+    </button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 1 – מה זה בידול?
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch1">
+  <div class="ch-header">
+    <div class="ch-num">פרק 01 / 04</div>
+    <h1 class="ch-title">מה זה <span style="color:var(--gold)">בידול</span>?</h1>
+    <p class="ch-desc">למה לא מספיק להיות "טוב" — ולמה מי שנראה "שונה" ינצח תמיד</p>
+  </div>
+
+  <div class="section">
+
+    <div class="big-quote">
+      <span>"אם אתה לא שונה, אתה זול."</span>
+      <small>— הסיבה שמחיר הוא תמיד הנושא כשאין מיתוג</small>
+    </div>
+
+    <h2 class="section-title">בידול הוא <span class="gold">לא</span> להיות אחרת בשביל להיות אחרת</h2>
+    <p style="color:var(--text2); margin-bottom:1.5rem;">בידול אמיתי הוא הסיבה שלקוח שמכיר 5 מתחרים שלך — בוחר דווקא בך. זה לא בגלל שאתה זול יותר, זה בגלל שמשהו בך מדבר אליו ברמה שהאחרים לא מגיעים אליה.</p>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(232,89,60,0.1);">❌</div>
+        <div class="card-title" style="color:var(--coral);">בידול שקרי</div>
+        <div class="card-text">"אנחנו נותנים שירות מהלב" · "איכות ללא פשרות" · "הניסיון שלנו מדבר בעד עצמו" — כולם אומרים את זה. אף אחד לא זוכר אף אחד.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(14,165,160,0.1);">✅</div>
+        <div class="card-title" style="color:var(--teal);">בידול אמיתי</div>
+        <div class="card-text">מבוסס על נקודת מבט ייחודית, מתודולוגיה ספציפית, קהל יעד מוגדר מאוד, או אישיות שאי אפשר לשכפל. זה מה שגורם לאנשים להגיד "זה בדיוק מה שחיפשתי."</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);">🎯</div>
+        <div class="card-title" style="color:#A78BFA;">בידול אסטרטגי</div>
+        <div class="card-text">לבחור בצורה מודעת במה אתה כן ובמה אתה לא. כי כשמנסים לדבר לכולם — מדברים לאף אחד. הצמצום הוא הכוח.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">הגשר מ<span class="gold">מה</span> ל<span class="gold">מי</span></h2>
+    <p style="color:var(--text2);margin-bottom:1.5rem;">רוב היזמים מתחילים מ"מה אני מוכר". אבל הלקוח קונה פתרון לבעיה שלו, לא מוצר. הבידול קורה כשמבינים מי הלקוח ברמה עמוקה — מה הוא מרגיש, ממה הוא מפחד, מה הוא חולם עליו.</p>
+
+    <div class="compare">
+      <div class="compare-header bad">🛑 ללא בידול</div>
+      <div class="compare-header good">✅ עם בידול אמיתי</div>
+
+      <div class="compare-item bad">"אני מאמנת עסקית"</div>
+      <div class="compare-item good">"אני עוזרת ליזמות חיבורתיות להוציא את הביזנס שבהן"</div>
+
+      <div class="compare-item bad">"אני מציעה ייעוץ פיננסי"</div>
+      <div class="compare-item good">"אני מסייעת לנשים בגיל 40+ לבנות עצמאות כלכלית אחרי גירושין"</div>
+
+      <div class="compare-item bad">"אני מלמדת יוגה"</div>
+      <div class="compare-item good">"יוגה לאמהות בלחץ — 20 דקות ביום, לא צריך מחצלת"</div>
+
+      <div class="compare-item bad">"אני צלם"</div>
+      <div class="compare-item good">"מתמחה בצילום מיתוג לנשים בעלות עסק — קסם טבעי, ללא פוטושופ"</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num">80%</div>
+        <div class="stat-label">מהחלטות הרכישה מונעות מרגש, לא רציונל</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">×7</div>
+        <div class="stat-label">יותר אמון נוצר כשיש מיתוג עקבי לאורך זמן</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">×3</div>
+        <div class="stat-label">מחיר גבוה יותר כאשר יש מיתוג ברור</div>
+      </div>
+    </div>
+
+    <div class="highlight">
+      <strong>💡 תרגיל מהיר:</strong>
+      <p>כתב/כתבי משפט אחד שמסביר מה אתם עושים — בלי להשתמש במילים: "איכות", "שירות", "מקצועיות", "ניסיון" או "מהלב". אם קשה — זה בדיוק המקום לעבוד.</p>
+    </div>
+
+    <div class="chapter-footer">
+      <button class="btn btn-secondary" onclick="goChapter(0)">← חזרה</button>
+      <button class="btn btn-primary" onclick="goChapter(2)">פרק 2: למה זה קריטי לכסף ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 2 – למה זה חשוב?
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch2">
+  <div class="ch-header">
+    <div class="ch-num">פרק 02 / 04</div>
+    <h1 class="ch-title">למה בידול<br><span style="color:var(--coral)">= כסף</span>?</h1>
+    <p class="ch-desc">הקשר הישיר בין מיתוג ברור לבין תמחור, חיפוש אורגני, ורווחיות</p>
+  </div>
+
+  <div class="section">
+
+    <h2 class="section-title">3 הפצצות שאנשים לא מבינים</h2>
+
+    <div class="steps-flow">
+      <div class="step-item">
+        <div class="step-num">💸</div>
+        <div class="step-content">
+          <h4>בידול מאפשר לתמחר גבוה יותר</h4>
+          <p>כשאין בידול, הלקוח משווה מחיר. כשיש בידול ברור, הלקוח משווה ערך. Apple מוכרת טלפון ב-5,000 ₪ כשסמסונג מוכרת טלפון ב-1,500 ₪ — לשניהם יש מסך, מצלמה ובטריה. ההבדל? מיתוג.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">🧲</div>
+        <div class="step-content">
+          <h4>בידול יוצר הפניות מפה לאוזן</h4>
+          <p>אנשים ממליצים על מה שהם זוכרים וכמו מה שנגע בהם. "יש לי מאמנת עסקית" — לא זוכרים. "יש לי מישהי שעזרה לי להוציא את הביזנס שחייתי בבטן 10 שנים" — זוכרים ומספרים.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <div class="step-num">⏱️</div>
+        <div class="step-content">
+          <h4>בידול מקצר את מחזור המכירה</h4>
+          <p>כשמישהו מגיע אליך ואומר "שמעתי עליך, אני יודע בדיוק מה אתה עושה ולמה אתה הפתרון שלי" — השיחה הזו לא מתחילה ב-"ספר לי על עצמך". היא מתחילה ב-"מתי נתחיל?".</p>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">בידול בשוק עמוס — <span class="gold">מי שוחה נגד הזרם</span></h2>
+
+    <p style="color:var(--text2);margin-bottom:1.5rem;">המוח האנושי עובד על מנגנון של סינון. כל יום אנחנו חשופים ל-6,000-10,000 פרסומות ומסרים שיווקיים. המוח מפעיל מסנן — הוא זוכר רק את מה שבולט, מצחיק, מרגש, מעצבן, מפתיע, או מדויק מאוד לו.</p>
+
+    <div class="big-quote">
+      <span>"אם אתה מדבר לכולם, אתה מדבר <span>לאף אחד.</span>"</span>
+      <small>— הכלל הראשון של שיווק ממוקד</small>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">דוגמאות מהשטח — בידול שעובד</h2>
+
+    <div class="brand-example">
+      <div class="brand-color" style="background:linear-gradient(135deg,#FF6B6B,#FF8E53);"></div>
+      <div>
+        <div class="brand-name">Airbnb</div>
+        <div class="brand-desc">לא "השכרת דירות" — <strong style="color:var(--text);">"Belong Anywhere" · שייכות בכל מקום בעולם</strong>. המותג הוא הרגש, לא הנכס.</div>
+      </div>
+    </div>
+    <div class="brand-example">
+      <div class="brand-color" style="background:linear-gradient(135deg,#4F46E5,#7C3AED);"></div>
+      <div>
+        <div class="brand-name">דייסון</div>
+        <div class="brand-desc">לא "שואב אבק" — <strong style="color:var(--text);">מהנדסים שמסרבים לפשרות.</strong> תמחור ×3-5 מהמתחרים. מיתוג מבוסס ערכים, לא מחיר.</div>
+      </div>
+    </div>
+    <div class="brand-example">
+      <div class="brand-color" style="background:linear-gradient(135deg,#10B981,#059669);"></div>
+      <div>
+        <div class="brand-name">מאמן עסקי מקומי לדוגמה</div>
+        <div class="brand-desc">במקום "ייעוץ עסקי לכל עסק" → <strong style="color:var(--text);">"מאמן לרופאים שרוצים לפתוח קליניקה פרטית"</strong>. בידול = עמדת מומחיות = מחיר גבוה + הפניות ממוקדות.</div>
+      </div>
+    </div>
+
+    <div class="highlight teal">
+      <strong>🎯 שאלה לעצמכם:</strong>
+      <p style="margin-top:0.5rem;">מה הדבר שרק אתם עושים, שחסר לשוק, שהלקוח שלכם יגיד "בדיוק מה שרציתי"? כתבו עכשיו 3 תשובות אפשריות — לא מסננים, רק כותבים.</p>
+    </div>
+
+    <div class="chapter-footer">
+      <button class="btn btn-secondary" onclick="goChapter(1)">← חזרה</button>
+      <button class="btn btn-primary" onclick="goChapter(3)">פרק 3: אישיות מותג ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 3 – אישיות מותג
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch3">
+  <div class="ch-header">
+    <div class="ch-num">פרק 03 / 04</div>
+    <h1 class="ch-title">אישיות<br><span style="color:var(--purple)">מותג</span></h1>
+    <p class="ch-desc">אם המותג שלך היה אדם — מי הוא? הכירו את 12 ארכיטיפי המותג שמניעים את השוק העולמי</p>
+  </div>
+
+  <div class="section">
+
+    <p style="color:var(--text2);margin-bottom:2rem;">כשרוצים שלקוחות יתחברו למותג ברמה רגשית, צריך לתת לו אישיות אמיתית. כארל יונג זיהה 12 ארכיטיפים אוניברסליים שמהם כולנו מזדהים — ואותם משתמשות חברות כמו Nike, Apple ו-Harley Davidson לבנות אהבת מותג שמחזיקה עשרות שנים.</p>
+
+    <h2 class="section-title">12 ארכיטיפי המותג — <span class="gold">בחר/י את שלך</span></h2>
+    <p style="color:var(--text2);margin-bottom:1.5rem;">לחצ/י על הארכיטיפ שמרגיש הכי קרוב לאיך שאתה רוצה שלקוחות ירגישו כשהם פוגשים את המותג שלך:</p>
+
+    <div class="archetype-grid">
+      <div class="archetype-card" onclick="selectArchetype(this,'מנהיג')" data-arch="מנהיג">
+        <span class="emoji">👑</span>
+        <div class="name">המנהיג</div>
+        <div class="desc">שליטה, יוקרה, סדר. מה-: Rolex, Mercedes</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'מחדש')" data-arch="מחדש">
+        <span class="emoji">💡</span>
+        <div class="name">המחדש</div>
+        <div class="desc">יצירתיות, פתיחת גבולות. מה-: Apple, Tesla</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'גיבור')" data-arch="גיבור">
+        <span class="emoji">⚡</span>
+        <div class="name">הגיבור</div>
+        <div class="desc">ניצחון, תוצאות, מאמץ. מה-: Nike, Adidas</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'מאהב')" data-arch="מאהב">
+        <span class="emoji">❤️</span>
+        <div class="name">המאהב</div>
+        <div class="desc">חושניות, יחסים, רגש. מה-: Dior, Häagen-Dazs</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'חכם')" data-arch="חכם">
+        <span class="emoji">🔬</span>
+        <div class="name">החכם</div>
+        <div class="desc">מומחיות, מידע, אמת. מה-: Google, McKinsey</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'חוקר')" data-arch="חוקר">
+        <span class="emoji">🗺️</span>
+        <div class="name">החוקר</div>
+        <div class="desc">הרפתקה, חופש, גילוי. מה-: Jeep, Patagonia</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'מטפל')" data-arch="מטפל">
+        <span class="emoji">🌿</span>
+        <div class="name">המטפל</div>
+        <div class="desc">אכפתיות, תמיכה, בטחון. מה-: Johnson & Johnson</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'שוויוני')" data-arch="שוויוני">
+        <span class="emoji">🤝</span>
+        <div class="name">השוויוני</div>
+        <div class="desc">שייכות, קהילה, ישרות. מה-: IKEA, Levi's</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'מרדן')" data-arch="מרדן">
+        <span class="emoji">🔥</span>
+        <div class="name">המרדן</div>
+        <div class="desc">שבירת כללים, מהפכה. מה-: Harley Davidson</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'מלך-שוטים')" data-arch="מלך-שוטים">
+        <span class="emoji">🎭</span>
+        <div class="name">המלך שוטים</div>
+        <div class="desc">כיף, הומור, ספונטניות. מה-: M&M's, Old Spice</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'קסם')" data-arch="קסם">
+        <span class="emoji">✨</span>
+        <div class="name">הקסם</div>
+        <div class="desc">שינוי, חלום, פלא. מה-: Disney, Coca-Cola</div>
+      </div>
+      <div class="archetype-card" onclick="selectArchetype(this,'תמים')" data-arch="תמים">
+        <span class="emoji">🌸</span>
+        <div class="name">התמים</div>
+        <div class="desc">טוהר, פשטות, אופטימיות. מה-: Dove, Innocent</div>
+      </div>
+    </div>
+
+    <div id="archetypeResult" style="display:none; margin-top:2rem;" class="highlight">
+      <strong>בחרת: <span id="selectedArch" style="color:var(--gold);"></span></strong>
+      <p id="archetypeMsg" style="margin-top:0.5rem;"></p>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">כוונן את <span class="gold">קשת האישיות</span></h2>
+    <p style="color:var(--text2);margin-bottom:2rem;">כל מותג יושב על ציר בין שני קטבים. גרור/י את הסליידרים לפי האישיות שאתה/את רוצה להשדר:</p>
+
+    <div id="traitSliders">
+      <div class="trait-row">
+        <div class="trait-label">רשמי/מקצועי</div>
+        <input type="range" min="1" max="10" value="5" id="t1" oninput="updateTraits()">
+        <div class="trait-label-right">קסוואל/חברי</div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-label">שקט/ענוותן</div>
+        <input type="range" min="1" max="10" value="5" id="t2" oninput="updateTraits()">
+        <div class="trait-label-right">נועז/בולט</div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-label">ישיר/מעשי</div>
+        <input type="range" min="1" max="10" value="5" id="t3" oninput="updateTraits()">
+        <div class="trait-label-right">סיפורי/רגשי</div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-label">רציני</div>
+        <input type="range" min="1" max="10" value="5" id="t4" oninput="updateTraits()">
+        <div class="trait-label-right">משועשע</div>
+      </div>
+      <div class="trait-row">
+        <div class="trait-label">מסורתי</div>
+        <input type="range" min="1" max="10" value="5" id="t5" oninput="updateTraits()">
+        <div class="trait-label-right">חדשני/פורץ</div>
+      </div>
+    </div>
+
+    <div class="personality-preview visible" id="personalityPreview">
+      <h4>פרופיל האישיות שלך עד כה:</h4>
+      <div id="traitBars"></div>
+    </div>
+
+    <div class="chapter-footer">
+      <button class="btn btn-secondary" onclick="goChapter(2)">← חזרה</button>
+      <button class="btn btn-primary" onclick="goChapter(4)">פרק 4: שפה מיתוגית ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 4 – שפה מיתוגית
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch4">
+  <div class="ch-header">
+    <div class="ch-num">פרק 04 / 04</div>
+    <h1 class="ch-title">שפה<br><span style="color:var(--teal)">מיתוגית</span></h1>
+    <p class="ch-desc">איך המותג שלך מדבר — הטון, הסגנון, המילים שבוחרים ואלה שנמנעים מהן</p>
+  </div>
+
+  <div class="section">
+
+    <p style="color:var(--text2);margin-bottom:2rem;">שפה מיתוגית היא לא רק "מה אנחנו אומרים" — היא "איך אנחנו אומרים את זה". זה כולל את הטון, הקצב, הסלנג (אם יש), רמת הרשמיות, ואפילו סימני הפיסוק שאנחנו בוחרים. Nike לא אומרת "המוצר שלנו הוא איכותי" — היא אומרת "Just Do It".</p>
+
+    <h2 class="section-title">4 רכיבי <span class="gold">טון אוף וויס</span></h2>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon" style="background:rgba(245,166,35,0.1);">🗣️</div>
+        <div class="card-title">קול (Voice)</div>
+        <div class="card-text">האישיות של המותג — לא משתנה. Nike תמיד אומצת, Apple תמיד פשוטה, Dove תמיד חמה. הקול הוא ה-DNA.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(14,165,160,0.1);">🎵</div>
+        <div class="card-title">טון (Tone)</div>
+        <div class="card-text">משתנה לפי הקשר. אותו מותג יכול להיות שמח בפוסט של חג, ורציני בתגובה להתלונה. הטון מסתגל, הקול לא.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(124,58,237,0.1);">📝</div>
+        <div class="card-title">מסרים (Messages)</div>
+        <div class="card-text">3-5 מסרים ליבה שחוזרים בכל תוכן. כמו מנטרות — הלקוח צריך לשמוע אותם שוב ושוב כדי שיידבקו.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background:rgba(232,89,60,0.1);">🚫</div>
+        <div class="card-title">מה לא (Donts)</div>
+        <div class="card-text">מה המותג לעולם לא יגיד. מה-": בלי מילים כמו "גנרי", בלי סלנג, בלי להשוות למתחרים. הגבולות מגדירים.</div>
+      </div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">בחר/י את <span class="gold">הטון</span> שלך</h2>
+    <p style="color:var(--text2);margin-bottom:1.5rem;">בחרו עד 5 תכונות שמגדירות איך המותג שלכם מדבר:</p>
+
+    <div class="voice-grid" id="voiceTags">
+      <span class="voice-tag" onclick="toggleVoice(this)">אמפטי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">ישיר</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">השראתי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">מעשי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">משעשע</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">אוטוריטטיבי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">חם ואישי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">מאתגר</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">פואטי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">מינימליסטי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">נועז ואמיץ</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">סיפורי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">מדעי/מדויק</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">קהילתי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">מהפכני</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">יוקרתי</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">נגיש ופשוט</span>
+      <span class="voice-tag" onclick="toggleVoice(this)">סקרן</span>
+    </div>
+
+    <h2 class="section-title" style="margin-top:3rem;">דוגמת <span class="gold">שפה מיתוגית</span> — אותה עובדה, 3 מותגים</h2>
+
+    <div class="highlight">
+      <strong>עובדה: "המוצר שלנו חוסך זמן"</strong>
+    </div>
+
+    <div class="brand-example">
+      <div class="brand-color" style="background:#1DB954;"></div>
+      <div>
+        <div class="brand-name" style="color:#1DB954;">מותג קסוואל וחבריסטי</div>
+        <div class="brand-desc">"תחסרי/י כמה שעות בשבוע — נשתמש בהן יחד במשהו שבאמת שווה 😏"</div>
+      </div>
+    </div>
+    <div class="brand-example">
+      <div class="brand-color" style="background:#0EA5E9;"></div>
+      <div>
+        <div class="brand-name" style="color:#0EA5E9;">מותג מקצועי-יוקרתי</div>
+        <div class="brand-desc">"אנו מחזירים לכם את המשאב היקר ביותר שלכם — הזמן."</div>
+      </div>
+    </div>
+    <div class="brand-example">
+      <div class="brand-color" style="background:#EF4444;"></div>
+      <div>
+        <div class="brand-name" style="color:#EF4444;">מותג מרדני-מאתגר</div>
+        <div class="brand-desc">"עצרו לבזבז שעות על זה. תפסיקו לחיות על הפלנר. תתחילו לחיות."</div>
+      </div>
+    </div>
+
+    <div class="highlight coral" style="margin-top:3rem;">
+      <strong>⚠️ הטעות הנפוצה ביותר:</strong>
+      <p style="margin-top:0.5rem;">לחבר שפה מיתוגית ללא עקביות. כל פוסט בטון אחר, כל הצעת מחיר בסגנון שונה. הלקוח מרגיש בלבול. עקביות = אמון = מכירה. צרו "מדריך שפה" פנימי — 1 עמוד. זה יחסוך לכם שעות של תיאומים.</p>
+    </div>
+
+    <div class="chapter-footer">
+      <button class="btn btn-secondary" onclick="goChapter(3)">← חזרה</button>
+      <button class="btn btn-primary" onclick="goChapter(5)">פרק 5: מנוע המיתוג ←</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CHAPTER 5 – AI BRANDING ENGINE
+═══════════════════════════════════════════════════════ -->
+<div class="chapter" id="ch5">
+  <div class="ch-header">
+    <div class="ch-num">בונוס — מנוע מיתוג</div>
+    <h1 class="ch-title">🤖 המיתוג<br><span style="color:var(--gold)">שלך עכשיו</span></h1>
+    <p class="ch-desc">מלא/י את הפרטים ותקבל/י ניתוח מיתוגי מלא — כמו שחברת מיתוג מובילה הייתה בונה לך. בחינם. תוך דקות.</p>
+  </div>
+
+  <div class="section">
+
+    <div class="highlight" style="margin-bottom:2rem;">
+      <strong>🎯 איך זה עובד?</strong>
+      <p style="margin-top:0.5rem;">ממלאים את 5 השאלות ← לוחצים "צור פרומפט" ← מקבלים פרומפט מוכן להעתקה ← מדביקים אישית ב-ChatGPT (המאמן העסקי של GameChangerZ) ← מורידים קובץ עם כל המידע לשמירה.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">1. <span>שם העסק + תחום</span> — מה אתם עושים ב-1 משפט?</label>
+      <input type="text" id="f1" placeholder="לדוגמה: LiveFit — אימוני כושר אונליין לאמהות עובדות" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">2. <span>מי הלקוח האידיאלי שלכם?</span> — תארו אותם ספציפית (גיל, מצב, תחושה)</label>
+      <textarea id="f2" placeholder="לדוגמה: אמהות בגיל 30-45, עובדות, מרגישות שאין להן זמן לעצמן, מתגעגעות לגוף ולאנרגיה שהיו להן לפני ילדים..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">3. <span>מה הבעיה שאתם פותרים?</span> — לא המוצר, הבעיה הרגשית האמיתית</label>
+      <textarea id="f3" placeholder="לדוגמה: הן מרגישות אשמה כשהן לוקחות זמן לעצמן, אז לא עושות כלום. צריכות פתרון מהיר שלא מצריך לצאת מהבית ולא לעשות יותר מ-30 דקות..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">4. <span>3 ערכי ליבה</span> — מה חשוב לכם בצורה שאינה מתפשרת?</label>
+      <input type="text" id="f4" placeholder="לדוגמה: אמינות, הומור, תוצאות מהירות" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">5. <span>מה מייחד אתכם</span> מהמתחרים? (גם אם עדיין לא בדקתם אותם)</label>
+      <textarea id="f5" placeholder="לדוגמה: אנחנו לא מוכרים 'שינוי חיים' — אנחנו מוכרים 30 דקות ביום שעושות הבדל. אנחנו מאוד פרקטיים, לא מוטיבציונליים. וגם — מאמנת שהיא אמא בעצמה..."></textarea>
+    </div>
+
+    <div class="highlight coral" style="margin:2rem 0 0.5rem;">
+      <strong>🔥 שתי שאלות הזהב — הבידול האמיתי שלך</strong>
+      <p style="margin-top:0.5rem;">השאלות האלה חושפות את מה שרק אתם יכולים לומר — ואי אפשר להמציא.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">6. <span>מה מרתיח אותך בתחום שלך?</span> איזה מיתוס או שקר שכולם מאמינים בו — אתה יודע שהוא לא נכון?</label>
+      <textarea id="f6" placeholder="לדוגמה: מרתיח אותי שאומרים 'חייבים תואר כדי להיות מומחה'. או שאומרים שצריך להעלות תוכן כל יום. אני יודעת שזה שקר כי..."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">7. <span>3 משפטים שאנשים אמרו עליך</span> — לקוחות, חברים, בן/בת זוג. מה הם רואים בך שאתה לא תמיד רואה בעצמך?</label>
+      <textarea id="f7" placeholder="לדוגמה: 'את היחידה שהצלחתי להבין אותה' · 'הסבר שלך שינה לי את כל הראייה' · 'לא ידעתי שאפשר ללמד ככה בסבלנות'..."></textarea>
+    </div>
+
+    <div class="highlight teal" style="margin:2rem 0 0.5rem;">
+      <strong>💬 בידול מבוסס לקוחות אמיתיים</strong>
+      <p style="margin-top:0.5rem;">הציטוטים של הלקוחות שלך הם הקופי הטוב ביותר שיש — הם אומרים בדיוק מה הם קיבלו, בשפה שלהם. הדביקו כאן ציטוטים מהסקר, מהפיילוט, מהוואטסאפ — כל פידבק אמיתי שקיבלתם. זה יישמר אצלכם בקובץ וגם יעזור למאמן לבנות לכם מיתוג מדויק.</p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">8. <span>ציטוטים מלקוחות אמיתיים</span> — מהסקר, מהפיילוט, מהוואטסאפ <span style="color:var(--text3);font-weight:400;">(רשות — דלגו אם עוד אין)</span></label>
+      <textarea id="f8" style="min-height:160px;" placeholder="לדוגמה:
+'לא האמנתי שאני יכולה לפתוח עסק — אחרי השיעור הראשון הבנתי שאני כבר יזמת'
+'הסבר הכי ברור שקיבלתי על תמחור'
+'השאלות שלך גרמו לי לראות את העסק שלי אחרת לגמרי'"></textarea>
+    </div>
+
+    <div class="error-msg" id="errorMsg">אנא מלא/י את כל השדות לפני שנייצר את המיתוג שלך.</div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="generateBtn" onclick="generateBranding()">
+        ✨ צור פרומפט מוכן להדבקה
+      </button>
+      <button class="btn btn-secondary" onclick="goChapter(4)">← חזרה לשיעור</button>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" id="loadingState">
+      <div class="spinner"></div>
+      <p>בונה את הפרומפט שלך<span class="loading-dots"></span></p>
+      <p style="font-size:0.8rem;color:var(--text3);margin-top:0.5rem;">אוסף את כל הנתונים שמילאת</p>
+    </div>
+
+    <!-- AI Result -->
+    <div class="ai-result" id="aiResult">
+
+      <div style="text-align:center;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--border);">
+        <div style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.15em;color:var(--text3);margin-bottom:0.5rem;">הבריף המיתוגי שלך מוכן 🎯</div>
+        <div id="brandName" style="font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--text);"></div>
+      </div>
+
+      <div class="result-section">
+        <div class="result-section-title">📋 סיכום מה שמילאת</div>
+        <div id="rSummary" class="result-text"></div>
+      </div>
+
+      <div class="result-section">
+        <div class="result-section-title">🤖 הפרומפט המוכן להדבקה ב-ChatGPT</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:0.75rem;">העתיקי את הטקסט הבא ← פתחי את המאמן העסקי שלך ב-ChatGPT ← הדביקי ← קבלי את הניתוח המיתוגי המלא</p>
+        <div style="display:flex;align-items:flex-start;gap:0.6rem;padding:0.85rem 1rem;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:8px;margin-bottom:1rem;font-size:0.85rem;color:var(--text2);">
+          <span style="font-size:1rem;flex-shrink:0;">📎</span>
+          <span><strong style="color:var(--gold);">לפני שמדביקים</strong> — צרפו את מחברת המצפן שלכם ל-ChatGPT (כפתור + בתחתית שורת הצ'אט). הפרומפט כבר מנחה את ה-AI להתייחס אליה אם היא מצורפת.</span>
+        </div>
+        <div style="position:relative;">
+          <textarea id="promptBox" readonly style="min-height:340px;font-size:0.82rem;line-height:1.7;background:var(--bg3);border:1px solid rgba(124,58,237,0.3);color:var(--text2);font-family:monospace;direction:rtl;width:100%;border-radius:10px;padding:1rem;"></textarea>
+          <button onclick="copyPrompt()" style="position:absolute;top:10px;left:10px;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#A78BFA;padding:6px 14px;border-radius:20px;font-size:0.78rem;cursor:pointer;font-family:'Heebo',sans-serif;">📋 העתק פרומפט</button>
+        </div>
+      </div>
+
+      <div style="margin-top:2rem;padding:1.5rem;background:rgba(14,165,160,0.06);border:1px solid rgba(14,165,160,0.2);border-radius:var(--radius);">
+        <div style="font-size:0.85rem;font-weight:700;color:var(--teal);margin-bottom:0.5rem;">💾 שמרי את הקובץ אצלך</div>
+        <p style="font-size:0.85rem;color:var(--text2);margin-bottom:1rem;">קובץ טקסט עם כל מה שמילאת + הפרומפט המלא — כדי שתוכלי לחזור ולהמשיך לפתח את המיתוג בכל עת.</p>
+        <div class="btn-row" style="margin-top:0;">
+          <button class="btn btn-primary" onclick="downloadFile()">⬇️ הורד קובץ מיתוג (.txt)</button>
+          <button class="btn btn-secondary" onclick="clearAndRedo()">🔄 עסק חדש</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="height:4rem;"></div>
+  </div>
+</div>
+
+</main>
+
+<script>
+const CHAPTERS = 6;
+let currentChapter = 0;
+let selectedArchetype = '';
+let selectedVoice = [];
+
+function init() {
+  const dots = document.getElementById('navDots');
+  for (let i = 0; i < CHAPTERS; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => goChapter(i);
+    d.title = ['פתיחה','בידול','כסף','אישיות','שפה','מיתוג'][i] || '';
+    dots.appendChild(d);
+  }
+  updateTraits();
+}
+
+function goChapter(n) {
+  document.querySelectorAll('.chapter').forEach(c => c.classList.remove('active'));
+  document.getElementById('ch' + n).classList.add('active');
+  currentChapter = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('active','done');
+    if (i === n) d.classList.add('active');
+    else if (i < n) d.classList.add('done');
+  });
+
+  const pct = (n / (CHAPTERS - 1)) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function selectArchetype(el, name) {
+  document.querySelectorAll('.archetype-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedArchetype = name;
+
+  const msgs = {
+    'מנהיג': 'מותגי מנהיג מדברים בסמכות ובביטחון. הם לא מבקשים — הם מובילים. לקוחות מחפשים אצלם מעמד ואיכות מעל הממוצע.',
+    'מחדש': 'מותגי חדשנות שוברים תבניות. הם מדברים על "אחרת", "ראשונים", "לא כמו כל השאר". לקוחות מתחברים כי הם רוצים להרגיש מקדימים.',
+    'גיבור': 'מותג שמניע לפעולה ולניצחון. כל קמפיין הוא קריאה לצבא. הלקוח הוא הגיבור, אתם הנשק שלו.',
+    'מאהב': 'מותג חושני ורגשי. הלקוח לא קונה מוצר — קונה חווית אהבה. כל נגיעה ב-מסר חייבת להיות מרגישה חמה ומיוחדת.',
+    'חכם': 'מותג שמציג מידע ומומחיות כיתרון. "אנחנו יודעים יותר, אז תסמוך עלינו." פניה לאנשים שחוקרים לפני שהם קונים.',
+    'חוקר': 'מותג עם נשמה של הרפתקה. לקוחות מרגישים שהם חלק ממשהו גדול יותר — תנועה, חיפוש, גילוי עצמי.',
+    'מטפל': 'מותג שמדבר אל הצורך בביטחון ובאכפתיות. הלקוח מרגיש מוגן. כל תוכן מדבר לרגש, לא למוח.',
+    'שוויוני': 'מותג שמדבר שפת "כולנו ביחד". לא מלמעלה למטה — ישרה ופשוטה. הלקוח מרגיש שהוא אחד מהם, לא לקוח.',
+    'מרדן': 'מותג שמאתגר את הסטטוס קוו. לדבר עם הלקוח כאילו הם שניהם נגד "המערכת". יוצר שבט נאמן מאוד.',
+    'מלך-שוטים': 'מותג שמצחיק ומשעשע. הלקוח מחכה לתוכן. מיקרו-קופי, הצעות שובבות, שפה של חבר. הכי קשה לעשות נכון — אבל הכי ויראלי.',
+    'קסם': 'מותג שמבטיח שינוי. כמו קסם, הלקוח מרגיש שחייו ישתנו. Disney לא מוכרת פארק שעשועים — מוכרת חלום.',
+    'תמים': 'מותג של טוהר ופשטות. מנגד לעולם מורכב ועמוס. לקוחות מתחברים כי הם רוצים משהו ישר, כן ונקי מחרטה.'
+  };
+
+  document.getElementById('selectedArch').textContent = name;
+  document.getElementById('archetypeMsg').textContent = msgs[name] || '';
+  document.getElementById('archetypeResult').style.display = 'block';
+}
+
+function updateTraits() {
+  const labels = ['רשמי ↔ קסוואל','שקט ↔ נועז','ישיר ↔ סיפורי','רציני ↔ משועשע','מסורתי ↔ חדשני'];
+  const vals = [1,2,3,4,5].map(i => parseInt(document.getElementById('t'+i).value));
+  const bars = document.getElementById('traitBars');
+  bars.innerHTML = labels.map((l,i) => `
+    <div class="trait-bar">
+      <div class="trait-name">${l}</div>
+      <div class="trait-track"><div class="trait-fill" style="width:${vals[i]*10}%"></div></div>
+      <div class="trait-val">${vals[i]}</div>
+    </div>
+  `).join('');
+}
+
+function toggleVoice(el) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    selectedVoice = selectedVoice.filter(v => v !== el.textContent);
+  } else {
+    if (selectedVoice.length >= 5) {
+      alert('בחר/י עד 5 תכונות');
+      return;
+    }
+    el.classList.add('selected');
+    selectedVoice.push(el.textContent);
+  }
+}
+
+function generateBranding() {
+  const fields = ['f1','f2','f3','f4','f5','f6','f7'];
+  const vals = fields.map(f => document.getElementById(f).value.trim());
+  const errEl = document.getElementById('errorMsg');
+
+  if (vals.some(v => !v)) {
+    errEl.classList.add('visible');
+    errEl.textContent = 'אנא מלא/י את כל השדות לפני שנייצר את הפרומפט.';
+    return;
+  }
+  errEl.classList.remove('visible');
+
+  document.getElementById('generateBtn').disabled = true;
+  document.getElementById('loadingState').classList.add('visible');
+  document.getElementById('aiResult').classList.remove('visible');
+
+  const [biz, customer, problem, values, unique, myth, others] = vals;
+  const quotes = document.getElementById('f8').value.trim();
+
+  // Collect personality data from previous chapters
+  const archStr = selectedArchetype || 'לא נבחר';
+  const traitLabels = ['רשמי↔קסוואל','שקט↔נועז','ישיר↔סיפורי','רציני↔משועשע','מסורתי↔חדשני'];
+  const traitVals = [1,2,3,4,5].map(i => document.getElementById('t'+i) ? document.getElementById('t'+i).value : '5');
+  const traitsStr = traitLabels.map((l,i) => l + ': ' + traitVals[i] + '/10').join(' | ');
+  const voiceStr = selectedVoice.length ? selectedVoice.join(', ') : 'לא נבחר';
+
+  // Build the ready-to-paste prompt
+  const prompt = `אתה מומחה מיתוג בכיר עם ניסיון של 20 שנה בבניית מותגים מובילים בישראל ובעולם.
+
+קיבלת בריף מיתוגי מלא מיזם/ת שעבר/ה שיעור בידול מקצועי:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📌 פרטי העסק
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+שם עסק ותחום: ${biz}
+לקוח אידיאלי: ${customer}
+הבעיה הרגשית האמיתית שנפתרת: ${problem}
+ערכי ליבה: ${values}
+ייחוד מהמתחרים: ${unique}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔥 הבידול האמיתי — קול אותנטי
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+מה מרתיח אותי בתחום / המיתוס שאני מנפץ: ${myth}
+מה אחרים אומרים עליי (בלשון שלהם): ${others}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+💬 ציטוטים מלקוחות אמיתיים
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${quotes}
+
+שים לב: הציטוטים האלה הם המילים המדויקות שהלקוחות השתמשו בהן — הם חומר גלם מצוין לקופי, למסרים, ולהבנה מה הלקוח באמת מרגיש. השתמש בהם בניתוח.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🧠 פרופיל האישיות שנבחר
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ארכיטיפ מותג: ${archStr}
+קשת האישיות: ${traitsStr}
+טון אוף וויס: ${voiceStr}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ המשימה שלך
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+בנה/י ניתוח מיתוגי מלא ומקצועי הכולל:
+
+1. ארכיטיפ המותג — אישור או הצעה לשינוי, עם הסבר
+2. הצהרת בידול — 2-3 משפטים חזקים שמסבירים למה הלקוח יבחר דווקא בעסק הזה
+3. סלוגן / טאגליין — קצר, חזק, בלתי נשכח (עד 7 מילים בעברית)
+4. 5 תכונות אישיות של המותג
+5. טון אוף וויס — תיאור מפורט + 5 מילים מפתח
+6. אווטר לקוח אידיאלי — שם בדוי, גיל, מצב חיים, כאבים, חלומות (4-5 משפטים)
+7. 3 מסרים מרכזיים שחוזרים בכל תוכן
+8. פלטת צבעים מומלצת + הסבר למה
+9. 3 דברים שהמותג לעולם לא יגיד
+10. המלצה לשם מותג אם ניתן לשפר
+
+כתוב/י בעברית, בצורה ברורה ומעשית. זה יהיה הבסיס שהיזם/ת עובד/ת ממנו מהיום.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 מחקר עומק — קול הלקוח ברשת
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+בצע/י מחקר ברשתות החברתיות (פייסבוק, אינסטגרם, רדיט, פורומים, קבוצות ווטסאפ פתוחות, ביקורות גוגל, TikTok תגובות) ומצא/י איך לקוחות מקהל היעד הזה מדברים על הבעיה — בשפה שלהם, לא בשפה מקצועית.
+
+ענה/י על הסעיפים הבאים:
+
+א. **שפת הרחוב מול שפת המקצוע** — לצד כל מונח מקצועי שמופיע בבריף, כתוב/י את המילים שהלקוחות עצמם משתמשים בהן. לדוגמה: לא "חוסר בבידול אסטרטגי" — אלא "אף אחד לא מבין מה אני עושה" או "אמרו לי שאני יקר מדי".
+
+ב. **הרגעים המתסכלים** — תאר/י 3-4 סיטואציות קונקרטיות ויומיומיות שבהן הלקוח חווה את הבעיה. לא "הלקוח מרגיש חוסר ביטחון" — אלא "יושב בשלישי בלילה, גולל בפיד, רואה מתחרה שמרוויח יותר, ומרגיש שעשה משהו לא נכון".
+
+ג. **המשפט שהם אומרים לעצמם** — מה הם אומרים בראש בדיוק ברגע הכי קשה? (לדוגמה: "אולי זה פשוט לא בשבילי", "כולם מצליחים חוץ ממני", "אני לא טוב מספיק בשיווק").
+
+ד. **מה הם כבר ניסו ולא עבד** — אילו פתרונות הם כבר חיפשו לפני שהגיעו? מה הם אמרו עליהם ברשת? למה זה לא ענה להם?
+
+ה. **המילים שמושכות אותם** — אילו ביטויים, כותרות או פוסטים גרמו להם ללחוץ, לשתף, להגיב "זה אני בדיוק!"? 
+
+השתמש/י בממצאים האלה בניתוח המיתוגי ובדוגמת התוכן שתכתוב/י — כי תוכן שמדבר בשפת הלקוח ממיר פי כמה מתוכן שמדבר בשפה מקצועית.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📎 אם צורפה מחברת המצפן
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+אם היזם/ת צירפו את מחברת המצפן האישית — קרא/י אותה ושלב/י את תוכנה בניתוח. המצפן כולל ערכים אישיים, מאיזה מקום הם מגיעים לעסק, פרטי המוצר, קהל היעד, והכאב הגלוי והסמוי. אם לא צורף קובץ — המשך/י עם המידע שלמעלה בלבד.`;
+
+  // Simulate brief "building" delay for UX
+  setTimeout(() => {
+    document.getElementById('loadingState').classList.remove('visible');
+    renderResult({ biz, customer, problem, values, unique, myth, others, quotes, archStr, traitsStr, voiceStr, prompt });
+    document.getElementById('generateBtn').disabled = false;
+  }, 900);
+}
+
+function renderResult(d) {
+  document.getElementById('brandName').textContent = d.biz.split('—')[0].split('-')[0].trim();
+
+  // Summary
+  document.getElementById('rSummary').innerHTML = `
+    <div style="display:grid;gap:0.75rem;">
+      <div style="padding:0.85rem 1rem;background:rgba(255,255,255,0.04);border-right:3px solid var(--gold);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">עסק ותחום</strong><br>
+        <span style="color:var(--text);">${d.biz}</span>
+      </div>
+      <div style="padding:0.85rem 1rem;background:rgba(255,255,255,0.04);border-right:3px solid var(--coral);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">ארכיטיפ שנבחר</strong><br>
+        <span style="color:var(--text);">${d.archStr}</span>
+      </div>
+      <div style="padding:0.85rem 1rem;background:rgba(255,255,255,0.04);border-right:3px solid var(--teal);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">טון שנבחר</strong><br>
+        <span style="color:var(--text);">${d.voiceStr}</span>
+      </div>
+      <div style="padding:0.85rem 1rem;background:rgba(255,255,255,0.04);border-right:3px solid var(--purple);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">קשת אישיות</strong><br>
+        <span style="color:var(--text);font-size:0.85rem;">${d.traitsStr}</span>
+      </div>
+      <div style="padding:0.85rem 1rem;background:rgba(232,89,60,0.06);border-right:3px solid var(--coral);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">מה מרתיח אותי בתחום</strong><br>
+        <span style="color:var(--text);font-size:0.85rem;">${d.myth}</span>
+      </div>
+      <div style="padding:0.85rem 1rem;background:rgba(14,165,160,0.06);border-right:3px solid var(--teal);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">מה אחרים אומרים עליי</strong><br>
+        <span style="color:var(--text);font-size:0.85rem;">${d.others}</span>
+      </div>
+      \${d.quotes ? \`<div style="padding:0.85rem 1rem;background:rgba(124,58,237,0.06);border-right:3px solid var(--purple);border-radius:6px;">
+        <strong style="color:var(--text2);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">💬 ציטוטים מלקוחות</strong><br>
+        <span style="color:var(--text);font-size:0.85rem;white-space:pre-line;">\${d.quotes}</span>
+      </div>\` : ''}
+    </div>`;
+
+  document.getElementById('promptBox').value = d.prompt;
+
+  document.getElementById('aiResult').classList.add('visible');
+  setTimeout(() => {
+    document.getElementById('aiResult').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+function copyPrompt() {
+  const box = document.getElementById('promptBox');
+  box.select();
+  navigator.clipboard.writeText(box.value).then(() => {
+    alert('הפרומפט הועתק ✅\nעכשיו פתח/י את המאמן העסקי ב-ChatGPT והדביק/י!');
+  }).catch(() => {
+    box.select();
+    document.execCommand('copy');
+    alert('הועתק ✅');
+  });
+}
+
+function downloadFile() {
+  const box = document.getElementById('promptBox');
+  if (!box.value) { alert('אנא צרי קודם את הפרומפט'); return; }
+
+  const biz = document.getElementById('f1').value || 'עסק';
+  const date = new Date().toLocaleDateString('he-IL');
+
+  const fileContent = `מסמך מיתוג | GameChangerZ
+================================
+נוצר: ${date}
+עסק: ${biz}
+================================
+
+${box.value}
+
+================================
+📌 השלבים הבאים:
+1. העתק את הפרומפט למעלה
+2. פתח את המאמן העסקי ב-ChatGPT
+3. הדבק וקבל ניתוח מיתוגי מלא
+4. שמור את התשובה בקובץ נפרד
+5. חזור לכלי הזה כשתרצה לרענן או לשנות כיוון
+================================`;
+
+  const blob = new Blob([fileContent], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'מיתוג-' + biz.slice(0,20).replace(/[^א-תa-z0-9]/gi,'_') + '.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function clearAndRedo() {
+  ['f1','f2','f3','f4','f5'].forEach(f => document.getElementById(f).value = '');
+  document.getElementById('aiResult').classList.remove('visible');
+  document.getElementById('errorMsg').classList.remove('visible');
+  document.getElementById('generateBtn').disabled = false;
+  window.scrollTo({ top: 0 });
+}
+
+init();
+</script>
+</body>
+</html>
